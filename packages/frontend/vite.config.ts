@@ -4,7 +4,15 @@ import eslint from 'vite-plugin-eslint';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  plugins: [react(), eslint(), viteTsconfigPaths()],
+  plugins: [
+    react({
+      babel: {
+        babelrc: true,
+      },
+    }),
+    eslint(),
+    viteTsconfigPaths(),
+  ],
   server: {
     open: true,
     port: 3000,
