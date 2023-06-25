@@ -1,8 +1,10 @@
+import { StarBorder } from '@mui/icons-material';
 import {
   Button,
   CardActions,
   CardContent,
   CardMedia,
+  Rating,
   Typography,
 } from '@mui/material';
 import { CardContainer } from 'style';
@@ -22,6 +24,12 @@ export function CafeCard() {
         <Typography variant="body2" noWrap={false}>
           서울특별시 관악구
         </Typography>
+        <Rating
+          value={2.5}
+          readOnly
+          precision={0.5}
+          emptyIcon={<StarBorder style={{ opacity: 0.8 }} fontSize="inherit" />}
+        />
       </CardContent>
       <CardActions>
         <Button size="small">위치 보기</Button>
