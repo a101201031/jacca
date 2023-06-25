@@ -1,15 +1,18 @@
+import { Bootstrap } from 'bootstrap';
 import { Home } from 'page';
-import {
-  Route,
-  RouterProvider,
-  createBrowserRouter,
-  createRoutesFromElements,
-} from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-const router = createBrowserRouter(
-  createRoutesFromElements(<Route path="/" element={<Home />} />),
-);
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Home />,
+  },
+]);
 
 export function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Bootstrap>
+      <RouterProvider router={router} />
+    </Bootstrap>
+  );
 }
