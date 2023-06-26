@@ -21,7 +21,7 @@ export function CafeCard() {
         <Typography gutterBottom variant="h5" component="div">
           TEST 카페
         </Typography>
-        <Typography variant="body2" noWrap={false}>
+        <Typography variant="body1" noWrap={false}>
           서울특별시 관악구
         </Typography>
         <Rating

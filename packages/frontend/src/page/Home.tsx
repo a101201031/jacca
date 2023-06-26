@@ -7,7 +7,7 @@ export function Home() {
     <CssBaseline>
       <TopAppBar />
       <MainContainer>
-        <Box display="flex" marginTop="2rem">
+        <FlexBox marginTop="2rem">
           <Main component="main">
             <FlexBox flexWrap="wrap" margin="-1rem">
               {Array(10)
@@ -17,7 +17,7 @@ export function Home() {
                 ))}
             </FlexBox>
           </Main>
-        </Box>
+        </FlexBox>
       </MainContainer>
     </CssBaseline>
   );

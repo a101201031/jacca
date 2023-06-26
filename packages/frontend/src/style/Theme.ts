@@ -4,6 +4,7 @@ export const defaultTheme = createTheme({
   palette: {
     primary: {
       main: '#dfb78c',
+      dark: '#c76a24',
       contrastText: '#000',
     },
     secondary: {
@@ -12,6 +13,7 @@ export const defaultTheme = createTheme({
     },
   },
   typography: {
+    htmlFontSize: 16,
     fontFamily: ['Stylish', 'Roboto'].join(','),
   },
   breakpoints: { values: { xs: 0, sm: 767, md: 1056, lg: 1440, xl: 1919 } },
