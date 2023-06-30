@@ -1,6 +1,14 @@
 import type { ReactNode } from 'react';
+import { RecoilRoot } from 'recoil';
+import { FirebaseProvider } from './FirebaseProvider';
 import { MuiProvider } from './MuiProvider';
 
 export function Bootstrap({ children }: { children: ReactNode }) {
-  return <MuiProvider>{children}</MuiProvider>;
+  return (
+    <RecoilRoot>
+      <FirebaseProvider>
+        <MuiProvider>{children}</MuiProvider>
+      </FirebaseProvider>
+    </RecoilRoot>
+  );
 }
