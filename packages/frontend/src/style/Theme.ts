@@ -14,7 +14,7 @@ export const defaultTheme = createTheme({
   },
   typography: {
     htmlFontSize: 16,
-    fontFamily: ['Stylish', 'Roboto'].join(','),
+    fontFamily: ['Pretendard-Regular', 'Stylish', 'Roboto'].join(','),
   },
   breakpoints: { values: { xs: 0, sm: 767, md: 1056, lg: 1440, xl: 1919 } },
 });
