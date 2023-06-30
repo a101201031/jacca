@@ -5,7 +5,6 @@ import {
 } from '@mui/icons-material';
 import {
   Box,
-  CssBaseline,
   Divider,
   IconButton,
   ImageList,
@@ -14,7 +13,6 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { TopAppBar } from 'component';
 import { useEffect, useRef } from 'react';
 import { FlexBox, MainContainer, Space } from 'style';
 
@@ -83,145 +81,141 @@ export function Cafe() {
   }, []);
 
   return (
-    <CssBaseline>
-      <TopAppBar />
-      <MainContainer>
-        <Box sx={{ paddingX: '1rem' }}>
-          <ImageList
-            sx={{ width: '100%', height: '450px' }}
-            variant="quilted"
-            cols={8}
-            rowHeight={225}
-          >
-            {itemData.map((item) => (
-              <ImageListItem
-                key={item.img}
-                cols={item.cols || 1}
-                rows={item.rows || 1}
+    <MainContainer>
+      <Box sx={{ paddingX: '1rem' }}>
+        <ImageList
+          sx={{ width: '100%', height: '450px' }}
+          variant="quilted"
+          cols={8}
+          rowHeight={220}
+        >
+          {itemData.map((item) => (
+            <ImageListItem
+              key={item.img}
+              cols={item.cols || 1}
+              rows={item.rows || 1}
+            >
+              <img
+                {...srcset(item.img, 450, item.rows, item.cols)}
+                alt={item.title}
+                loading="lazy"
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
+        <Box>
+          <FlexBox marginY="0.5rem">
+            <FlexBox flexWrap="wrap" alignItems="center" marginY="0.5rem">
+              <Typography marginRight="1rem" variant="h4">
+                TEST 카페 서울대입구점
+              </Typography>
+              <Rating
+                value={2.6}
+                readOnly
+                precision={0.5}
+                emptyIcon={
+                  <StarBorderOutlined
+                    style={{ opacity: 0.8 }}
+                    fontSize="inherit"
+                  />
+                }
+              />
+              <Typography
+                sx={{ color: (theme) => theme.palette.primary.dark }}
+                marginLeft="1rem"
+                variant="h4"
               >
-                <img
-                  {...srcset(item.img, 450, item.rows, item.cols)}
-                  alt={item.title}
-                  loading="lazy"
-                />
-              </ImageListItem>
-            ))}
-          </ImageList>
-          <Box>
-            <FlexBox marginY="0.5rem">
-              <FlexBox flexWrap="wrap" alignItems="center" marginY="0.5rem">
-                <Typography marginRight="1rem" variant="h4">
-                  TEST 카페 서울대입구점
-                </Typography>
-                <Rating
-                  value={2.6}
-                  readOnly
-                  precision={0.5}
-                  emptyIcon={
-                    <StarBorderOutlined
-                      style={{ opacity: 0.8 }}
-                      fontSize="inherit"
-                    />
-                  }
-                />
-                <Typography
-                  sx={{ color: (theme) => theme.palette.primary.dark }}
-                  marginLeft="1rem"
-                  variant="h4"
-                >
-                  2.6
-                </Typography>
-              </FlexBox>
-              <Space />
-              <IconButton sx={{ height: '100%' }}>
-                <EditNoteOutlined fontSize="large" />
-                <Typography>리뷰 작성</Typography>
-              </IconButton>
+                2.6
+              </Typography>
             </FlexBox>
-            <FlexBox flexWrap="wrap" marginY="0.5rem" columnGap="0.5rem">
-              <TagChip>코딩하기 좋은</TagChip>
-              <TagChip>1인</TagChip>
-              <TagChip>4인 이상</TagChip>
-            </FlexBox>
-            <FlexBox flexWrap="wrap" marginY="0.5rem" columnGap="0.5rem">
-              <EditNoteOutlined fontSize="small" />
-              <Typography variant="body1">2,031</Typography>
-            </FlexBox>
-          </Box>
+            <Space />
+            <IconButton sx={{ height: '100%' }}>
+              <EditNoteOutlined fontSize="large" />
+              <Typography>리뷰 작성</Typography>
+            </IconButton>
+          </FlexBox>
+          <FlexBox flexWrap="wrap" marginY="0.5rem" columnGap="0.5rem">
+            <TagChip>코딩하기 좋은</TagChip>
+            <TagChip>1인</TagChip>
+            <TagChip>4인 이상</TagChip>
+          </FlexBox>
+          <FlexBox flexWrap="wrap" marginY="0.5rem" columnGap="0.5rem">
+            <EditNoteOutlined fontSize="small" />
+            <Typography variant="body1">2,031</Typography>
+          </FlexBox>
         </Box>
-        <Divider variant="middle" />
-        <FlexBox flexWrap="wrap" paddingY="1rem">
-          <CafeContentBox>
-            <Box margin="1rem">
-              <Typography variant="h4">평가</Typography>
+      </Box>
+      <Divider variant="middle" />
+      <FlexBox flexWrap="wrap" paddingY="1rem">
+        <CafeContentBox>
+          <Box margin="1rem">
+            <Typography variant="h4">평가</Typography>
+            <Divider />
+            <Box marginY="0.5rem">
+              <Typography variant="h5">맛</Typography>
               <Divider />
-              <Box marginY="0.5rem">
-                <Typography variant="h5">맛</Typography>
-                <Divider />
-                <ReviewContentContainer>
-                  <ReviewContentTitle>생각보다 맛있어요</ReviewContentTitle>
-                  <ReviewContentGraphContainer>
-                    <ReviewContentGraph width="70%" />
-                  </ReviewContentGraphContainer>
-                  70%
-                </ReviewContentContainer>
-                <ReviewContentContainer>
-                  <ReviewContentTitle>보통이에요</ReviewContentTitle>
-                  <ReviewContentGraphContainer>
-                    <ReviewContentGraph width="31%" />
-                  </ReviewContentGraphContainer>
-                  21%
-                </ReviewContentContainer>
-                <ReviewContentContainer>
-                  <ReviewContentTitle>생각보다 별로에요</ReviewContentTitle>
-                  <ReviewContentGraphContainer>
-                    <ReviewContentGraph width="9%" />
-                  </ReviewContentGraphContainer>
-                  9%
-                </ReviewContentContainer>
-              </Box>
+              <ReviewContentContainer>
+                <ReviewContentTitle>생각보다 맛있어요</ReviewContentTitle>
+                <ReviewContentGraphContainer>
+                  <ReviewContentGraph width="70%" />
+                </ReviewContentGraphContainer>
+                70%
+              </ReviewContentContainer>
+              <ReviewContentContainer>
+                <ReviewContentTitle>보통이에요</ReviewContentTitle>
+                <ReviewContentGraphContainer>
+                  <ReviewContentGraph width="31%" />
+                </ReviewContentGraphContainer>
+                21%
+              </ReviewContentContainer>
+              <ReviewContentContainer>
+                <ReviewContentTitle>생각보다 별로에요</ReviewContentTitle>
+                <ReviewContentGraphContainer>
+                  <ReviewContentGraph width="9%" />
+                </ReviewContentGraphContainer>
+                9%
+              </ReviewContentContainer>
             </Box>
-            <Box margin="1rem">
-              <Typography variant="h4">정보</Typography>
-              <Divider />
-              <DetailTable>
-                <tbody>
-                  <tr>
-                    <DetailTh>
-                      <PlaceOutlined fontSize="small" />
-                      주소
-                    </DetailTh>
-                    <DetailTd>서울특별시 관악구 행운1길 0 상가 104호</DetailTd>
-                  </tr>
-                  <tr>
-                    <DetailTh>전화번호</DetailTh>
-                    <DetailTd>02-0000-0000</DetailTd>
-                  </tr>
-                  <tr>
-                    <DetailTh>규모</DetailTh>
-                    <DetailTd>1층 ~ 4층</DetailTd>
-                  </tr>
-                  <tr>
-                    <DetailTh>가격대</DetailTh>
-                    <DetailTd>만원 미만</DetailTd>
-                  </tr>
-                  <tr>
-                    <DetailTh>영업시간</DetailTh>
-                    <DetailTd>15:00 - 21:00</DetailTd>
-                  </tr>
-
-                  <tr>
-                    <DetailTh>휴일</DetailTh>
-                    <DetailTd>월, 화, 수, 목</DetailTd>
-                  </tr>
-                </tbody>
-              </DetailTable>
-            </Box>
-          </CafeContentBox>
-          <MapContainer ref={mapElement} />
-        </FlexBox>
-      </MainContainer>
-    </CssBaseline>
+          </Box>
+          <Box margin="1rem">
+            <Typography variant="h4">정보</Typography>
+            <Divider />
+            <DetailTable>
+              <tbody>
+                <tr>
+                  <DetailTh>
+                    <PlaceOutlined fontSize="small" />
+                    주소
+                  </DetailTh>
+                  <DetailTd>서울특별시 관악구 행운1길 0 상가 104호</DetailTd>
+                </tr>
+                <tr>
+                  <DetailTh>전화번호</DetailTh>
+                  <DetailTd>02-0000-0000</DetailTd>
+                </tr>
+                <tr>
+                  <DetailTh>규모</DetailTh>
+                  <DetailTd>1층 ~ 4층</DetailTd>
+                </tr>
+                <tr>
+                  <DetailTh>가격대</DetailTh>
+                  <DetailTd>만원 미만</DetailTd>
+                </tr>
+                <tr>
+                  <DetailTh>영업시간</DetailTh>
+                  <DetailTd>15:00 - 21:00</DetailTd>
+                </tr>
+                <tr>
+                  <DetailTh>휴일</DetailTh>
+                  <DetailTd>월, 화, 수, 목</DetailTd>
+                </tr>
+              </tbody>
+            </DetailTable>
+          </Box>
+        </CafeContentBox>
+        <MapContainer ref={mapElement} />
+      </FlexBox>
+    </MainContainer>
   );
 }
 
