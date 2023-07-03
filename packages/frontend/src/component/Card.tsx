@@ -1,12 +1,5 @@
 import { StarBorder } from '@mui/icons-material';
-import {
-  Button,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Rating,
-  Typography,
-} from '@mui/material';
+import { CardContent, CardMedia, Rating, Typography } from '@mui/material';
 import { CardContainer } from 'style';
 
 export function CafeCard() {
@@ -19,10 +12,13 @@ export function CafeCard() {
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          TEST 카페
+          {`TEST 카페 `}
+          <Typography variant="h5" display="inline" color="primary.dark">
+            {`2.6`}
+          </Typography>
         </Typography>
         <Typography variant="body1" noWrap={false}>
-          서울특별시 관악구
+          {`서울특별시 관악구`}
         </Typography>
         <Rating
           value={2.5}
@@ -31,10 +27,6 @@ export function CafeCard() {
           emptyIcon={<StarBorder style={{ opacity: 0.8 }} fontSize="inherit" />}
         />
       </CardContent>
-      <CardActions>
-        <Button size="small">위치 보기</Button>
-        <Button size="small">상세 정보</Button>
-      </CardActions>
     </CardContainer>
   );
 }

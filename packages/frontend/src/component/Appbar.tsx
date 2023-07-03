@@ -2,21 +2,21 @@ import {
   AccountCircleOutlined,
   DarkModeOutlined,
   LightModeOutlined,
-  SearchOutlined,
 } from '@mui/icons-material';
+import type { ButtonProps } from '@mui/material';
 import {
   AppBar,
   Button,
-  Container,
   IconButton,
   Menu,
   MenuItem,
   Toolbar,
 } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { getAuth, signOut } from 'firebase/auth';
 import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { firebaseUserAtom } from 'store';
 import { Space } from 'style';
 import { LoginPopup } from './Login';
@@ -37,40 +37,49 @@ export function TopAppBar() {
   }
 
   return (
-    <AppBar color="inherit" position="sticky">
-      <Container maxWidth="xl">
-        <Toolbar>
-          <Button component={RouterLink} to={'/'}>
-            jacca
-          </Button>
-          <IconButton>
-            <SearchOutlined />
-          </IconButton>
-          <Space />
-          <IconButton onClick={themeModeClick}>
-            {themeMode === 'dark' ? (
-              <DarkModeOutlined />
-            ) : (
-              <LightModeOutlined />
-            )}
-          </IconButton>
-          {user ? (
-            <UserMenu />
+    <AppBar color="inherit" position="fixed">
+      <Toolbar>
+        <LogoButton component={RouterLink} to={'/'}>
+          jacca
+        </LogoButton>
+        <Space />
+        <IconButton size="large" onClick={themeModeClick}>
+          {themeMode === 'dark' ? (
+            <DarkModeOutlined sx={{ fontSize: 28 }} />
           ) : (
-            <Button variant="contained" onClick={loginPopupClick}>
-              로그인
-            </Button>
+            <LightModeOutlined sx={{ fontSize: 28 }} />
           )}
-          <LoginPopup open={loginPopupOpen} setOpen={setLoginPopupOpen} />
-        </Toolbar>
-      </Container>
+        </IconButton>
+        {user ? (
+          <UserMenu />
+        ) : (
+          <Button variant="contained" onClick={loginPopupClick}>
+            {`로그인`}
+          </Button>
+        )}
+        <LoginPopup open={loginPopupOpen} setOpen={setLoginPopupOpen} />
+      </Toolbar>
     </AppBar>
   );
 }
 
+interface LinkButtonProps extends ButtonProps {
+  component?: typeof RouterLink;
+  to?: string;
+}
+
+const LogoButton = styled(Button)<LinkButtonProps>`
+  width: 100px;
+  height: 33px;
+`;
+
 function UserMenu() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isUserMenuOpen = !!anchorEl;
+
+  const resetUser = useResetRecoilState(firebaseUserAtom);
+
+  const navigate = useNavigate();
 
   const handleUserMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget);
@@ -83,18 +92,14 @@ function UserMenu() {
   const handleSignOutClick = async () => {
     const auth = getAuth();
     await signOut(auth);
+    resetUser();
+    navigate(0);
   };
 
   return (
     <>
-      <IconButton
-        color="secondary"
-        aria-label="account of current user"
-        aria-controls="user-menu"
-        aria-haspopup="true"
-        onClick={handleUserMenuOpen}
-      >
-        <AccountCircleOutlined />
+      <IconButton color="secondary" size="large" onClick={handleUserMenuOpen}>
+        <AccountCircleOutlined sx={{ fontSize: 34 }} />
       </IconButton>
       <Menu
         anchorEl={anchorEl}
@@ -110,10 +115,10 @@ function UserMenu() {
         open={isUserMenuOpen}
         onClose={handleUserMenuClose}
       >
-        <MenuItem onClick={handleUserMenuClose}>저장한 곳</MenuItem>
-        <MenuItem onClick={handleUserMenuClose}>내가 쓴 리뷰</MenuItem>
-        <MenuItem onClick={handleUserMenuClose}>설정</MenuItem>
-        <MenuItem onClick={handleSignOutClick}>로그아웃</MenuItem>
+        <MenuItem onClick={handleUserMenuClose}>{`저장한 곳`}</MenuItem>
+        <MenuItem onClick={handleUserMenuClose}>{`내가 쓴 리뷰`}</MenuItem>
+        <MenuItem onClick={handleUserMenuClose}>{`설정`}</MenuItem>
+        <MenuItem onClick={handleSignOutClick}>{`로그아웃`}</MenuItem>
       </Menu>
     </>
   );
