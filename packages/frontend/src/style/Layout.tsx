@@ -31,10 +31,9 @@ export const Space = styled(Box)`
 `;
 
 export const CardContainer = styled(Card)`
-  width: 20rem;
+  width: calc(25% - 1rem);
   border-radius: 4px;
-  margin: 1rem;
-  overflow: hidden;
+  margin: 0.5rem;
   display: flex;
   flex-direction: column;
   ${({ theme }) => theme.breakpoints.down('md')} {

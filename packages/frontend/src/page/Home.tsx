@@ -7,7 +7,7 @@ export function Home() {
   return (
     <main>
       <Toolbar />
-      <SearchBox>
+      <MainHeader>
         <Box width="100%" height="100%">
           <Typography
             variant="h1"
@@ -26,20 +26,18 @@ export function Home() {
             {`작업하기 좋은 카페, 작카`}
           </Typography>
         </Box>
-      </SearchBox>
+      </MainHeader>
       <Box component="section" paddingY="2.38rem">
-        <Box marginX="6rem">
-          <Typography variant="h2" color="primary.dark">
-            내 주변 카페 리스트
-          </Typography>
-          <FlexBox marginTop="2rem">
-            <FlexBox flexWrap="wrap" margin="-1rem">
-              {Array(10)
-                .fill(0)
-                .map((_, i) => (
-                  <CafeCard key={i} />
-                ))}
-            </FlexBox>
+        <Typography variant="h2" color="primary.dark" paddingX="5.625rem">
+          내 주변 카페 리스트
+        </Typography>
+        <Box marginTop="1.7rem">
+          <FlexBox flexWrap="wrap" marginX="5.625rem">
+            {Array(7)
+              .fill(0)
+              .map((_, i) => (
+                <CafeCard key={i} />
+              ))}
           </FlexBox>
         </Box>
       </Box>
@@ -47,7 +45,7 @@ export function Home() {
   );
 }
 
-const SearchBox = styled(Box)`
+const MainHeader = styled(Box)`
   background: linear-gradient(
       to bottom,
       rgba(20, 20, 20, 0.3),
