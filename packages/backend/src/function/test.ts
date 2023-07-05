@@ -1,4 +1,4 @@
-import { formatJSONResponse } from '@lib/api-gateway';
+import { formatJSONResponse } from '@lib/apiGateway';
 import { middyfy } from '@lib/lambda';
 import type { APIGatewayEvent } from 'aws-lambda';
 

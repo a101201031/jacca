@@ -1,4 +1,4 @@
-import { handlerPath } from '@lib/handler-resolver';
+import { handlerPath } from '@lib/handlerResolver';
 
 export const handler = {
   test: {
