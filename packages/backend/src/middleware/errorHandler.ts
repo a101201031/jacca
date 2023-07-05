@@ -1,5 +1,5 @@
+import { normalizeHttpResponse } from '@lib/nomalizeHttpResponse';
 import type middy from '@middy/core';
-import { normalizeHttpResponse } from '@lib/lambda';
 import createError, { HttpError } from 'http-errors';
 
 interface Error extends Partial<HttpError> {
