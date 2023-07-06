@@ -4,11 +4,16 @@ import { handler } from 'src/handler';
 const serverlessConfiguration: AWS = {
   service: 'backend',
   frameworkVersion: '3',
-  plugins: ['serverless-esbuild', 'serverless-offline'],
+  plugins: [
+    'serverless-esbuild',
+    'serverless-offline',
+    'serverless-dotenv-plugin',
+  ],
   provider: {
     name: 'aws',
     runtime: 'nodejs16.x',
     region: 'ap-northeast-2',
+    timeout: 10,
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
