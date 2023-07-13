@@ -12,6 +12,7 @@
   "dependencies": {
     "@middy/core": "^4.5.3",
     "@middy/http-json-body-parser": "^4.5.3",
+    "firebase-admin": "^11.10.0",
     "http-errors": "^2.0.0",
     "mongoose": "^7.3.1"
   },
