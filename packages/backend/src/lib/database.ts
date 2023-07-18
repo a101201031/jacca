@@ -49,7 +49,7 @@ class DatabaseConnector {
   }
 
   async dispose() {
-    await this.database.connection.close();
+    await this.database?.connection.close();
   }
 }
 
