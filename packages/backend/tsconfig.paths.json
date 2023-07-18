@@ -4,7 +4,10 @@
     "paths": {
       "@function/*": ["src/function/*"],
       "@lib/*": ["src/lib/*"],
-      "@middleware/*": ["src/middleware/*"]
+      "@middleware/*": ["src/middleware/*"],
+      "@service/*": ["src/service/*"],
+      "@model/*": ["src/model/*"],
+      "@validation/*": ["src/validation/*"]
     }
   }
 }

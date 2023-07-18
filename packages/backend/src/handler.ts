@@ -12,4 +12,15 @@ export const handler = {
       },
     ],
   },
+  createUser: {
+    handler: `${handlerPath(__dirname)}/function/createUser.createUser`,
+    events: [
+      {
+        http: {
+          method: 'post',
+          path: 'user',
+        },
+      },
+    ],
+  },
 };
