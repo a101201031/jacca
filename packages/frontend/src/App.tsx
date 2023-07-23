@@ -1,5 +1,5 @@
 import { Bootstrap } from 'bootstrap';
-import { Base, Cafe, Home } from 'page';
+import { Base, Cafe, CafeList, Home } from 'page';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 const router = createBrowserRouter([
@@ -11,7 +11,14 @@ const router = createBrowserRouter([
         path: '/',
         element: <Home />,
       },
-      { path: '/cafe/:cafeId', element: <Cafe /> },
+      {
+        path: '/cafe/:cafeId',
+        element: <Cafe />,
+      },
+      {
+        path: '/cafe',
+        element: <CafeList />,
+      },
     ],
   },
 ]);
