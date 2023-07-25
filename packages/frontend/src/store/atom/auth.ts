@@ -11,3 +11,8 @@ export const isCredentialLoadedAtom = atom<boolean>({
   key: 'isCredentialLoadedAtom',
   default: false,
 });
+
+export const accessTokenAtom = atom<string>({
+  key: 'accessTokenAtom',
+  default: '',
+});

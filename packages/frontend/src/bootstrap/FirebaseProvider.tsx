@@ -1,9 +1,13 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { useEffect } from 'react';
+import { getAuth, getIdToken, onAuthStateChanged } from 'firebase/auth';
 import type { ReactNode } from 'react';
+import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { firebaseUserAtom, isCredentialLoadedAtom } from 'store';
+import {
+  accessTokenAtom,
+  firebaseUserAtom,
+  isCredentialLoadedAtom,
+} from 'store';
 interface FirebaseProviderProps {
   children: ReactNode;
 }
@@ -22,18 +26,20 @@ const firebaseAuth = getAuth(firebaseApp);
 export function FirebaseProvider({ children }: FirebaseProviderProps) {
   const setFirebaseUser = useSetRecoilState(firebaseUserAtom);
   const setIsCredentialLoaded = useSetRecoilState(isCredentialLoadedAtom);
+  const setAccessToken = useSetRecoilState(accessTokenAtom);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, async (user) => {
       if (user) {
         setFirebaseUser(user);
+        const token = await getIdToken(user);
+        setAccessToken(token);
         setIsCredentialLoaded(true);
-        console.log(user);
       }
       setIsCredentialLoaded(true);
     });
     return () => unsubscribe();
-  }, [setIsCredentialLoaded, setFirebaseUser]);
+  }, [setIsCredentialLoaded, setFirebaseUser, setAccessToken]);
 
   return <>{children}</>;
 }

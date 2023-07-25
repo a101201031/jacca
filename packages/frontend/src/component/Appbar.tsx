@@ -17,7 +17,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
-import { firebaseUserAtom } from 'store';
+import { firebaseUserAtom, userSelector } from 'store';
 import { Space } from 'style';
 import { LoginPopup } from './Login';
 
@@ -25,7 +25,7 @@ export function TopAppBar() {
   const [themeMode, setThemeMode] = useState('light');
   const [loginPopupOpen, setLoginPopupOpen] = useState(false);
 
-  const user = useRecoilValue(firebaseUserAtom);
+  const user = useRecoilValue(userSelector);
 
   function themeModeClick() {
     setThemeMode(themeMode === 'light' ? 'dark' : 'light');

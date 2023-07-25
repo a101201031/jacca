@@ -9,22 +9,32 @@ interface AuthorizerEventTypes extends Omit<APIGatewayProxyEvent, 'body'> {
   body: { decodedIdToken: DecodedIdToken | null; [key: string | number]: any };
 }
 
-export const tokenDecoder = (): middy.MiddlewareObj<
-  AuthorizerEventTypes,
-  APIGatewayProxyResult
-> => {
+interface OptionTypes {
+  requiredAuth: boolean;
+}
+
+export const tokenDecoder = (
+  option: OptionTypes = { requiredAuth: false },
+): middy.MiddlewareObj<AuthorizerEventTypes, APIGatewayProxyResult> => {
   const before: middy.MiddlewareFn<
     AuthorizerEventTypes,
     APIGatewayProxyResult
   > = async (request) => {
     const { headers, httpMethod, body } = request.event;
-    let decodedIdToken = null;
-
     if (httpMethod === 'OPTIONS') return;
 
+    let decodedIdToken = null;
     const authHeader = 'Authorization';
 
-    if (!(authHeader in headers)) return;
+    if (!(authHeader in headers)) {
+      if (option.requiredAuth) {
+        throw createHttpError(401, {
+          code: 'invalid_token',
+          message: 'token is required.',
+        });
+      }
+      return;
+    }
 
     const tokenParts = headers.Authorization.split(' ');
     const idToken = tokenParts[1];

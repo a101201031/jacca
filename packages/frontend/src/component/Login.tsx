@@ -32,13 +32,10 @@ export function LoginPopup({ open, setOpen }: LoginPopupProps) {
   async function googleLogin() {
     const auth = getAuth();
     try {
-      // if (result) return;
       const provider = new GoogleAuthProvider();
       await signInWithRedirect(auth, provider);
-      const result = await getRedirectResult(auth);
-      console.log(result);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   }
 
@@ -84,10 +81,6 @@ export function LoginPopup({ open, setOpen }: LoginPopupProps) {
     </LoginBackdrop>
   );
 }
-
-const LoginDialog = styled(Dialog)`
-  /* display: flex; */
-`;
 
 const LoginBackdrop = styled(Backdrop)`
   z-index: ${({ theme }) => theme.zIndex.drawer + 1};

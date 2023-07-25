@@ -1,6 +1,7 @@
 import { CssBaseline } from '@mui/material';
-import { TopAppBar } from 'component';
-import { Outlet } from 'react-router-dom';
+import { AsyncBoundary, TopAppBar } from 'component';
+import { isUserNotFoundError } from 'helper';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { isCredentialLoadedAtom } from 'store';
 
@@ -9,8 +10,18 @@ export function Base() {
   return (
     isLoaded && (
       <CssBaseline>
-        <TopAppBar />
-        <Outlet />
+        <AsyncBoundary
+          errorFallback={(fallbackProps) => {
+            const { error } = fallbackProps;
+            if (isUserNotFoundError(error)) {
+              return <Navigate to="/sign-up" />;
+            }
+          }}
+          suspenseFallback={<></>}
+        >
+          <TopAppBar />
+          <Outlet />
+        </AsyncBoundary>
       </CssBaseline>
     )
   );

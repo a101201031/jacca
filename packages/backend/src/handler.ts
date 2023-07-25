@@ -23,4 +23,15 @@ export const handler = {
       },
     ],
   },
+  readUser: {
+    handler: `${handlerPath(__dirname)}/function/readUser.readUser`,
+    events: [
+      {
+        http: {
+          method: 'get',
+          path: 'user',
+        },
+      },
+    ],
+  },
 };

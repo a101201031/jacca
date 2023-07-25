@@ -8,11 +8,12 @@ import middyJsonBodyParser from '@middy/http-json-body-parser';
 import type { Handler } from 'aws-lambda';
 import type { ObjectSchema } from 'yup';
 
-const passMiddleware = () => null;
+const passMiddleware = () => ({ before() {} });
 
 type Middfy = ({
   handler,
   eventSchema,
+  requiredAuth,
 }: {
   handler: Handler;
   eventSchema?: {
@@ -20,13 +21,18 @@ type Middfy = ({
     pathParameterSchema?: ObjectSchema<any>;
     queryParameterSchema?: ObjectSchema<any>;
   };
+  requiredAuth?: boolean;
 }) => middy.MiddyfiedHandler;
 
-export const middyfy: Middfy = ({ handler, eventSchema }) =>
+export const middyfy: Middfy = ({
+  handler,
+  eventSchema,
+  requiredAuth = false,
+}) =>
   middy(handler)
     .use(middyJsonBodyParser())
     .use(firebaseConnector())
-    .use(tokenDecoder())
+    .use(tokenDecoder({ requiredAuth }))
     .use(eventSchema ? validator({ eventSchema }) : passMiddleware())
     .use(mongoDbConnector())
     .use(errorHandler());
