@@ -34,4 +34,15 @@ export const handler = {
       },
     ],
   },
+  searchPlace: {
+    handler: `${handlerPath(__dirname)}/function/searchPlace.searchPlace`,
+    events: [
+      {
+        http: {
+          method: 'get',
+          path: 'place',
+        },
+      },
+    ],
+  },
 };
