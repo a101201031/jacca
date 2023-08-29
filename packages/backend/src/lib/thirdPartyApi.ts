@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { queryParamsParser } from './fetch';
 
-const axiosClient = axios.create({
+const searchAxiosClient = axios.create({
   baseURL: `https://openapi.naver.com/v1/search`,
   headers: {
     'X-Naver-Client-Id': process.env.NAVER_CLIENT_ID,
@@ -9,7 +9,7 @@ const axiosClient = axios.create({
   },
 });
 
-interface SearchResultItem {
+interface SearchPlaceItem {
   title: string;
   link: string;
   category: string;
@@ -21,19 +21,19 @@ interface SearchResultItem {
   mapy: string;
 }
 
-interface SearchApiRes {
+interface SearchPlaceApiRes {
   lastBuildDate: string;
   total: number;
   start: number;
   display: number;
-  items: SearchResultItem[];
+  items: SearchPlaceItem[];
 }
 
 export const searchPlaceApi = async ({
   query,
   display = '5',
   sort = 'random',
-}): Promise<SearchApiRes> => {
+}): Promise<SearchPlaceApiRes> => {
   const queryString = queryParamsParser({
     query,
     display,
@@ -41,7 +41,7 @@ export const searchPlaceApi = async ({
     sort,
   });
 
-  const { data } = await axiosClient.get<SearchApiRes>(
+  const { data } = await searchAxiosClient.get<SearchPlaceApiRes>(
     `/local.json${queryString}`,
   );
   return data;
