@@ -45,4 +45,15 @@ export const handler = {
       },
     ],
   },
+  createCafe: {
+    handler: `${handlerPath(__dirname)}/function/createCafe.createCafe`,
+    events: [
+      {
+        http: {
+          method: 'post',
+          path: 'cafe',
+        },
+      },
+    ],
+  },
 };

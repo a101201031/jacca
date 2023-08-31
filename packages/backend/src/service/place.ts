@@ -1,4 +1,4 @@
-import { searchPlaceApi } from '@lib/searchApi';
+import { searchPlaceApi } from '@lib/thirdPartyApi';
 
 type SearchPlaceService = ({
   query,
