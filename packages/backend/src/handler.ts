@@ -56,4 +56,26 @@ export const handler = {
       },
     ],
   },
+  readCafe: {
+    handler: `${handlerPath(__dirname)}/function/readCafe.readCafe`,
+    events: [
+      {
+        http: {
+          method: 'get',
+          path: 'cafe/{cafeId}',
+        },
+      },
+    ],
+  },
+  deleteCafe: {
+    handler: `${handlerPath(__dirname)}/function/deleteCafe.deleteCafe`,
+    events: [
+      {
+        http: {
+          method: 'delete',
+          path: 'cafe/{cafeId}',
+        },
+      },
+    ],
+  },
 };

@@ -2,19 +2,21 @@ import { geocodeApi, searchImageApi } from '@lib/thirdPartyApi';
 import type { Cafe } from '@model/cafe';
 import { CafeModel } from '@model/cafe';
 
-type ReadCafeService = ({ _id }: Pick<Cafe, '_id'>) => Promise<Cafe | null>;
-
-type ReadCafeByTitleService = ({
-  title,
-}: Pick<Cafe, 'title'>) => Promise<Cafe | null>;
-
 type CreateCafeService = ({
   title,
   address,
 }: Pick<Cafe, 'title' | 'address'>) => Promise<Cafe>;
 
-export const readCafeService: ReadCafeService = async ({ _id }) => {
-  const cafe = await CafeModel.findById(_id).exec();
+type ReadCafeService = ({ id }: { id: string }) => Promise<Cafe | null>;
+
+type ReadCafeByTitleService = ({
+  title,
+}: Pick<Cafe, 'title'>) => Promise<Cafe | null>;
+
+type DeleteCafeService = ({ id }: { id: string }) => Promise<void>;
+
+export const readCafeService: ReadCafeService = async ({ id }) => {
+  const cafe = await CafeModel.findById(id).exec();
   return cafe;
 };
 
@@ -54,4 +56,8 @@ export const createCafeService: CreateCafeService = async ({
   });
 
   return cafe;
+};
+
+export const deleteCafeService: DeleteCafeService = async ({ id }) => {
+  await CafeModel.findByIdAndDelete(id);
 };

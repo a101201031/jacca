@@ -29,4 +29,5 @@ const handler: ValidatedHandler<typeof createUserBodySchema> = async (
 export const createUser = middyfy({
   handler,
   eventSchema: { bodyParameterSchema: createUserBodySchema },
+  requiredAuth: true,
 });
