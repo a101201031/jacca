@@ -1,6 +1,6 @@
 import { geocodeApi, searchImageApi } from '@lib/thirdPartyApi';
 import type { Cafe } from '@model/cafe';
-import { CafeModel } from '@model/cafe';
+import { CafeModel, CafeTagModel } from '@model/cafe';
 
 type CreateCafeService = ({
   title,
@@ -15,8 +15,16 @@ type ReadCafeByTitleService = ({
 
 type DeleteCafeService = ({ id }: { id: string }) => Promise<void>;
 
+type CreateCafeTagService = ({
+  cafeId,
+  tag,
+}: {
+  cafeId: string;
+  tag: string;
+}) => Promise<Cafe>;
+
 export const readCafeService: ReadCafeService = async ({ id }) => {
-  const cafe = await CafeModel.findById(id).exec();
+  const cafe = await CafeModel.findById(id).populate('tags').exec();
   return cafe;
 };
 
@@ -54,6 +62,26 @@ export const createCafeService: CreateCafeService = async ({
     location,
     images,
   });
+
+  return cafe;
+};
+
+export const addCafeTagService: CreateCafeTagService = async ({
+  cafeId,
+  tag,
+}) => {
+  let CafeTag = await CafeTagModel.findOne({ tag }).exec();
+  if (!CafeTag) {
+    CafeTag = await CafeTagModel.create({ tag });
+  }
+
+  const cafe = await CafeModel.findByIdAndUpdate(
+    cafeId,
+    {
+      $addToSet: { tags: CafeTag },
+    },
+    { new: true },
+  ).exec();
 
   return cafe;
 };

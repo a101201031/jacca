@@ -6,10 +6,14 @@ export const createCafeBodySchema = object({
   address: string().required(),
 });
 
-export const readDeleteCafePathParamSchema = object({
+export const cafePathParamSchema = object({
   cafeId: string()
     .required()
     .test({
       test: (v) => isValidObjectId(v),
     }),
+});
+
+export const createCafeTagBodySchema = object({
+  tag: string().required(),
 });

@@ -78,4 +78,15 @@ export const handler = {
       },
     ],
   },
+  createCafeTag: {
+    handler: `${handlerPath(__dirname)}/function/createCafeTag.createCafeTag`,
+    events: [
+      {
+        http: {
+          method: 'post',
+          path: 'cafe/{cafeId}/tag',
+        },
+      },
+    ],
+  },
 };

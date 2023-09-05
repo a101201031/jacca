@@ -20,9 +20,10 @@ export interface Cafe {
     title: string;
     url: string;
   }[];
+  tags: CafeTag[];
 }
 
-export const CafeSchema = new Schema<Cafe>(
+const CafeSchema = new Schema<Cafe>(
   {
     title: { type: String, required: true, unique: true },
     address: { type: String },
@@ -41,8 +42,25 @@ export const CafeSchema = new Schema<Cafe>(
         },
       ],
     },
+    tags: [{ type: Schema.Types.ObjectId, ref: 'cafeTag', unique: true }],
   },
   { timestamps: true, collection: 'cafes' },
 );
+
+interface CafeTag {
+  _id: Types.ObjectId;
+  tag: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const CafeTagSchema = new Schema<CafeTag>(
+  {
+    tag: { type: String, required: true, unique: true },
+  },
+  { timestamps: true },
+);
+
+export const CafeTagModel = model('cafeTag', CafeTagSchema);
 
 export const CafeModel = model('cafes', CafeSchema);
