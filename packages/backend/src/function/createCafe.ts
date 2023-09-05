@@ -29,4 +29,5 @@ export const createCafe = middyfy({
   eventSchema: {
     bodyParameterSchema: createCafeBodySchema,
   },
+  requiredAuth: true,
 });

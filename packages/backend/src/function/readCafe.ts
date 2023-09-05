@@ -5,13 +5,13 @@ import {
 } from '@lib/apiGateway';
 import { middyfy } from '@lib/lambda';
 import { readCafeService } from '@service/cafe';
-import { readDeleteCafePathParamSchema } from '@validation/cafe';
+import { cafePathParamSchema } from '@validation/cafe';
 import createHttpError from 'http-errors';
 
 const handler: ValidatedHandler<
   ISchemaAny,
   ISchemaAny,
-  typeof readDeleteCafePathParamSchema
+  typeof cafePathParamSchema
 > = async (event) => {
   const { cafeId } = event.pathParameters;
 
@@ -30,6 +30,5 @@ const handler: ValidatedHandler<
 
 export const readCafe = middyfy({
   handler,
-  eventSchema: { pathParameterSchema: readDeleteCafePathParamSchema },
-  requiredAuth: true,
+  eventSchema: { pathParameterSchema: cafePathParamSchema },
 });
