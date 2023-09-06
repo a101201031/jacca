@@ -20,7 +20,7 @@ export interface Cafe {
     title: string;
     url: string;
   }[];
-  tags: CafeTag[];
+  tags: Types.ObjectId[];
 }
 
 const CafeSchema = new Schema<Cafe>(

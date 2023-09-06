@@ -78,6 +78,17 @@ export const handler = {
       },
     ],
   },
+  readCafes: {
+    handler: `${handlerPath(__dirname)}/function/readCafes.readCafes`,
+    events: [
+      {
+        http: {
+          method: 'get',
+          path: 'cafes',
+        },
+      },
+    ],
+  },
   createCafeTag: {
     handler: `${handlerPath(__dirname)}/function/createCafeTag.createCafeTag`,
     events: [
