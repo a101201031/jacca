@@ -28,7 +28,7 @@ const CafeSchema = new Schema<Cafe>(
     title: { type: String, required: true, unique: true },
     address: { type: String },
     roadAddress: { type: String },
-    rating: { type: Number },
+    rating: { type: Number, default: 0 },
     location: {
       type: pointSchema,
       index: '2dsphere',

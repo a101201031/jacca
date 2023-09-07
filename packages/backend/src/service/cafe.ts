@@ -35,11 +35,17 @@ export const readCafeByTitleService: ReadCafeByTitleService = async ({
   return cafe;
 };
 
-export const readCafesService = async ({ title, rating, limit, offset }) => {
+export const readCafesService = async ({
+  title,
+  rating,
+  tags,
+  limit,
+  offset,
+}) => {
   const filterQuery = {
     title: title ? { $regex: new RegExp(title, 'i') } : { $exists: true },
-
-    rating: rating === 0 ? { $exists: true } : { $gte: rating },
+    tags: tags.length ? { $all: tags } : { $exists: true },
+    rating: { $gte: rating },
   };
 
   const cafes = await CafeModel.find(filterQuery)
