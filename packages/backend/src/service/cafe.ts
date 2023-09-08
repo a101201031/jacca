@@ -41,6 +41,8 @@ export const readCafesService = async ({
   tags,
   limit,
   offset,
+  sortBy,
+  orderBy,
 }) => {
   const filterQuery = {
     title: title ? { $regex: new RegExp(title, 'i') } : { $exists: true },
@@ -49,6 +51,7 @@ export const readCafesService = async ({
   };
 
   const cafes = await CafeModel.find(filterQuery)
+    .sort([[sortBy, orderBy]])
     .skip(offset)
     .limit(limit)
     .exec();

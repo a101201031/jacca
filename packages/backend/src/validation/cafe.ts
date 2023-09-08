@@ -14,7 +14,7 @@ export const cafePathParamSchema = object({
     }),
 });
 
-export const readCafeListQuerySchema = object({
+export const readCafesQuerySchema = object({
   title: string().default(''),
   rating: number().min(0).max(100).default(0),
   tags: array()
@@ -31,6 +31,8 @@ export const readCafeListQuerySchema = object({
     .default([]),
   limit: number().default(20),
   offset: number().min(0).default(0),
+  sortBy: string().oneOf(['title', 'rating', '_id']).default('_id'),
+  orderBy: string().oneOf(['asc', 'desc']).default('asc'),
 });
 
 export const createCafeTagBodySchema = object({
