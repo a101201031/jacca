@@ -1,14 +1,14 @@
 import type Types from 'mongoose';
 import type { InferSchemaType } from 'mongoose';
 import { Schema, model } from 'mongoose';
-import { pointSchema } from './GeoJson';
+import { PointSchema } from './GeoJson';
 
 export interface Cafe {
   _id: Types.ObjectId;
   title: string;
   address: string;
   roadAddress: string;
-  location: InferSchemaType<typeof pointSchema>;
+  location: InferSchemaType<typeof PointSchema>;
   rating: number;
   createdAt: Date;
   updatedAt: Date;
@@ -30,7 +30,7 @@ const CafeSchema = new Schema<Cafe>(
     roadAddress: { type: String },
     rating: { type: Number, default: 0 },
     location: {
-      type: pointSchema,
+      type: PointSchema,
       index: '2dsphere',
       require: true,
     },
