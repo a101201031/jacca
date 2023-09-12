@@ -100,4 +100,15 @@ export const handler = {
       },
     ],
   },
+  readCafeTags: {
+    handler: `${handlerPath(__dirname)}/function/readCafeTags.readCafeTags`,
+    events: [
+      {
+        http: {
+          method: 'get',
+          path: 'cafe/tags',
+        },
+      },
+    ],
+  },
 };

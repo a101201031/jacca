@@ -42,7 +42,7 @@ const CafeSchema = new Schema<Cafe>(
         },
       ],
     },
-    tags: [{ type: Schema.Types.ObjectId, ref: 'cafeTag', unique: true }],
+    tags: [{ type: Schema.Types.ObjectId, ref: 'cafeTag' }],
   },
   { timestamps: true, collection: 'cafes' },
 );

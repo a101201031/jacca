@@ -23,6 +23,14 @@ type CreateCafeTagService = ({
   tag: string;
 }) => Promise<Cafe>;
 
+type ReadCafeTagsService = () => Promise<
+  {
+    id: string;
+    tag: string;
+    count: number;
+  }[]
+>;
+
 export const readCafeService: ReadCafeService = async ({ id }) => {
   const cafe = await CafeModel.findById(id).populate('tags').exec();
   return cafe;
@@ -113,6 +121,27 @@ export const addCafeTagService: CreateCafeTagService = async ({
   ).exec();
 
   return cafe;
+};
+
+export const readCafeTagsService: ReadCafeTagsService = async () => {
+  const cafeTags = await CafeModel.aggregate()
+    .unwind('tags')
+    .lookup({
+      from: 'cafetags',
+      localField: 'tags',
+      foreignField: '_id',
+      as: 'docs',
+    })
+    .unwind('docs')
+    .group({
+      _id: '$docs._id',
+      tag: { $first: '$docs.tag' },
+      count: { $sum: 1 },
+    })
+    .sort({ count: 'desc' })
+    .exec();
+
+  return cafeTags;
 };
 
 export const deleteCafeService: DeleteCafeService = async ({ id }) => {
