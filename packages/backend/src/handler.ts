@@ -111,4 +111,15 @@ export const handler = {
       },
     ],
   },
+  createReview: {
+    handler: `${handlerPath(__dirname)}/function/createReview.createReview`,
+    events: [
+      {
+        http: {
+          method: 'post',
+          path: 'cafe/{cafeId}/review',
+        },
+      },
+    ],
+  },
 };
