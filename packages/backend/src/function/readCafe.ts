@@ -10,7 +10,6 @@ import createHttpError from 'http-errors';
 
 const handler: ValidatedHandler<
   ISchemaAny,
-  ISchemaAny,
   typeof cafePathParamSchema
 > = async (event) => {
   const { cafeId } = event.pathParameters;
