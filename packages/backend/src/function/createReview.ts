@@ -3,20 +3,18 @@ import { formatJSONResponse } from '@lib/apiGateway';
 import { middyfy } from '@lib/lambda';
 import { readCafeService } from '@service/cafe';
 import { createReviewService } from '@service/review';
-import { cafePathParamSchema } from '@validation/cafe';
 import { createReviewBodySchema } from '@validation/review';
 import createHttpError from 'http-errors';
 
-const handler: ValidatedHandler<
-  typeof createReviewBodySchema,
-  typeof cafePathParamSchema
-> = async (event) => {
+const handler: ValidatedHandler<typeof createReviewBodySchema> = async (
+  event,
+) => {
   const {
     decodedIdToken: { uid },
+    cafeId,
     score,
     content,
   } = event.body;
-  const { cafeId } = event.pathParameters;
 
   const cafe = await readCafeService({ id: cafeId });
 
@@ -41,7 +39,6 @@ export const createReview = middyfy({
   handler,
   eventSchema: {
     bodyParameterSchema: createReviewBodySchema,
-    pathParameterSchema: cafePathParamSchema,
   },
   requiredAuth: true,
 });

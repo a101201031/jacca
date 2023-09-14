@@ -117,7 +117,7 @@ export const handler = {
       {
         http: {
           method: 'post',
-          path: 'cafe/{cafeId}/review',
+          path: 'review',
         },
       },
     ],
