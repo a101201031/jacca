@@ -122,4 +122,15 @@ export const handler = {
       },
     ],
   },
+  readReviews: {
+    handler: `${handlerPath(__dirname)}/function/readReviews.readReviews`,
+    events: [
+      {
+        http: {
+          method: 'get',
+          path: 'reviews',
+        },
+      },
+    ],
+  },
 };

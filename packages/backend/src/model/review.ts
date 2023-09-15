@@ -14,7 +14,7 @@ export interface Review {
 const ReviewSchema = new Schema<Review>(
   {
     userId: { type: String, ref: 'user' },
-    cafeId: { type: Schema.Types.ObjectId, ref: 'cafe' },
+    cafeId: { type: Schema.Types.ObjectId, ref: 'cafes' },
     score: { type: Number, required: true },
     content: { type: String },
   },
