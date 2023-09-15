@@ -15,6 +15,24 @@ type ReadCafeByTitleService = ({
 
 type DeleteCafeService = ({ id }: { id: string }) => Promise<void>;
 
+type ReadCafesService = ({
+  title,
+  rating,
+  tags,
+  limit,
+  offset,
+  sortBy,
+  orderBy,
+}: {
+  title?: string;
+  rating?: number;
+  tags?: string[];
+  limit?: number;
+  offset?: number;
+  sortBy: 'title' | 'rating' | '_id';
+  orderBy: 'asc' | 'desc';
+}) => Promise<{ cafes: Cafe[]; total: number }>;
+
 type CreateCafeTagService = ({
   cafeId,
   tag,
@@ -43,7 +61,7 @@ export const readCafeByTitleService: ReadCafeByTitleService = async ({
   return cafe;
 };
 
-export const readCafesService = async ({
+export const readCafesService: ReadCafesService = async ({
   title,
   rating,
   tags,
