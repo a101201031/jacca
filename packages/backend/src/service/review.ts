@@ -12,6 +12,8 @@ type CreateCafeService = ({
   content?: string;
 }) => Promise<Review>;
 
+type ReadReviewService = ({ id }: { id: string }) => Promise<Review>;
+
 export const createReviewService: CreateCafeService = async ({
   userId,
   cafeId,
@@ -19,6 +21,11 @@ export const createReviewService: CreateCafeService = async ({
   content = '',
 }) => {
   const review = await ReviewModel.create({ userId, cafeId, score, content });
+  return review;
+};
+
+export const readReviewService: ReadReviewService = async ({ id }) => {
+  const review = await ReviewModel.findById(id).exec();
   return review;
 };
 

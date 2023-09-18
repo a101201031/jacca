@@ -24,3 +24,9 @@ export const readReviewsQueryParamSchema = object({
   'One of the cafeId or userId is required.',
   (v) => !(!v.cafeId && !v.userId),
 );
+
+export const reviewPathParamSchema = object({
+  reviewId: string().test({
+    test: (v) => isValidObjectId(v),
+  }),
+});
