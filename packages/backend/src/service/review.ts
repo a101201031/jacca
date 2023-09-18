@@ -29,6 +29,14 @@ export const readReviewService: ReadReviewService = async ({ id }) => {
   return review;
 };
 
+export const deleteReviewService = async ({ reviewId, userId }) => {
+  const review = await ReviewModel.findById({ _id: reviewId }).exec();
+  if (review.userId !== userId) {
+    throw new Error('user permission denied');
+  }
+  await review.deleteOne();
+};
+
 export const readReviewsService = async ({
   cafeId,
   userId,

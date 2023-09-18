@@ -133,6 +133,17 @@ export const handler = {
       },
     ],
   },
+  deleteReview: {
+    handler: `${handlerPath(__dirname)}/function/deleteReview.deleteReview`,
+    events: [
+      {
+        http: {
+          method: 'delete',
+          path: 'review/{reviewId}',
+        },
+      },
+    ],
+  },
   readReviews: {
     handler: `${handlerPath(__dirname)}/function/readReviews.readReviews`,
     events: [
