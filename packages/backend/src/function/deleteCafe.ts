@@ -1,15 +1,11 @@
-import {
-  formatJSONResponse,
-  type ISchemaAny,
-  type ValidatedHandler,
-} from '@lib/apiGateway';
+import type { ISchemaAny, ValidatedHandler } from '@lib/apiGateway';
+import { formatJSONResponse } from '@lib/apiGateway';
 import { middyfy } from '@lib/lambda';
 import { deleteCafeService, readCafeService } from '@service/cafe';
 import { cafePathParamSchema } from '@validation/cafe';
 import createHttpError from 'http-errors';
 
 const handler: ValidatedHandler<
-  ISchemaAny,
   ISchemaAny,
   typeof cafePathParamSchema
 > = async (event) => {
