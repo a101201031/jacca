@@ -14,3 +14,11 @@ export const createBookmarkService = async ({ userId, cafeId }) => {
 
   return bookmark;
 };
+
+export const deleteBookmarkService = async ({ userId, cafeId }) => {
+  const bookmark = await BookmarkModel.findByIdAndUpdate(userId, {
+    $pull: { cafes: cafeId },
+  }).exec();
+
+  return bookmark;
+};

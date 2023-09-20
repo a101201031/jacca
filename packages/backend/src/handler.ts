@@ -166,4 +166,15 @@ export const handler = {
       },
     ],
   },
+  deleteBookmark: {
+    handler: `${handlerPath(__dirname)}/function/deleteBookmark.deleteBookmark`,
+    events: [
+      {
+        http: {
+          method: 'delete',
+          path: 'bookmark/cafe/{cafeId}',
+        },
+      },
+    ],
+  },
 };
