@@ -155,4 +155,15 @@ export const handler = {
       },
     ],
   },
+  createBookmark: {
+    handler: `${handlerPath(__dirname)}/function/createBookmark.createBookmark`,
+    events: [
+      {
+        http: {
+          method: 'post',
+          path: 'bookmark',
+        },
+      },
+    ],
+  },
 };
