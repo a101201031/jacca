@@ -8,10 +8,20 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { CafeCard } from 'component';
+import { CafeAddPopup, CafeCard } from 'component';
+import { useState } from 'react';
 import { FlexBox } from 'style';
 
 export function CafeList() {
+  const [cafeAddPopupOpen, setCafeAddPopupOpen] = useState(false);
+
+  const cafeAddHandlOpen = () => {
+    setCafeAddPopupOpen(true);
+  };
+  const cafeAddHandleClose = () => {
+    setCafeAddPopupOpen(false);
+  };
+
   return (
     <main>
       <Toolbar />
@@ -53,11 +63,22 @@ export function CafeList() {
         marginLeft={'260px'}
         padding={'1rem'}
       >
-        <Box width={'100%'} bgcolor={'#FAFAFA'}>
-          <Button variant="text">별점 높은 순</Button>
-          <Button variant="text">리뷰 많은 순</Button>
-          <Button variant="text">가까운 순</Button>
-        </Box>
+        <FlexBox justifyContent="space-between" width={'100%'}>
+          <Box bgcolor={'#FAFAFA'}>
+            <Button variant="text">별점 높은 순</Button>
+            <Button variant="text">리뷰 많은 순</Button>
+            <Button variant="text">가까운 순</Button>
+          </Box>
+          <Box>
+            <Button variant="outlined" onClick={cafeAddHandlOpen}>
+              카페 등록하기
+            </Button>
+            <CafeAddPopup
+              isOpen={cafeAddPopupOpen}
+              handleClose={cafeAddHandleClose}
+            />
+          </Box>
+        </FlexBox>
         <FlexBox flexWrap="wrap" marginX="5.625rem">
           {Array(20)
             .fill(0)
