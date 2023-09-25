@@ -2,31 +2,25 @@ import { CloseOutlined } from '@mui/icons-material';
 import {
   Backdrop,
   Box,
-  Dialog,
   IconButton,
   Link,
   Paper,
   Typography,
   styled,
 } from '@mui/material';
-import {
-  GoogleAuthProvider,
-  getAuth,
-  getRedirectResult,
-  signInWithRedirect,
-} from 'firebase/auth';
+import googleLogo from 'assets/googleLogo.png';
+import { GoogleAuthProvider, getAuth, signInWithRedirect } from 'firebase/auth';
 import type { Dispatch, SetStateAction } from 'react';
 import { FlexBox } from 'style';
-import googleLogo from 'assets/googleLogo.png';
 
 interface LoginPopupProps {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export function LoginPopup({ open, setOpen }: LoginPopupProps) {
+export function LoginPopup({ isOpen, setIsOpen }: LoginPopupProps) {
   function handleClose() {
-    setOpen(false);
+    setIsOpen(false);
     document.body.style.overflow = 'unset';
   }
   async function googleLogin() {
@@ -40,7 +34,7 @@ export function LoginPopup({ open, setOpen }: LoginPopupProps) {
   }
 
   return (
-    <LoginBackdrop open={open}>
+    <LoginBackdrop open={isOpen}>
       <LoginContainer>
         <LoginIntroBlock></LoginIntroBlock>
         <LoginContentBlock>

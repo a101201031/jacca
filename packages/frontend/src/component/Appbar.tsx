@@ -57,7 +57,7 @@ export function TopAppBar() {
             {`로그인`}
           </Button>
         )}
-        <LoginPopup open={loginPopupOpen} setOpen={setLoginPopupOpen} />
+        <LoginPopup isOpen={loginPopupOpen} setIsOpen={setLoginPopupOpen} />
       </Toolbar>
     </AppBar>
   );
