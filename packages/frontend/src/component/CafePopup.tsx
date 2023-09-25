@@ -8,8 +8,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { fetcher } from 'helper';
+import { fetcher, isAxiosError } from 'helper';
 import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { accessTokenAtom } from 'store';
 
 interface CafeAddPopupProps {
   handleClose: () => void;
@@ -37,6 +39,7 @@ export function CafeAddPopup({ handleClose, isOpen }: CafeAddPopupProps) {
 }
 
 function CafeAddForm({ handleClose }: CafeAddFormProps) {
+  const accessToken = useRecoilValue(accessTokenAtom);
   const [keyword, setKeyword] = useState<string>('');
   const [placeOption, setPlaceOption] = useState<Place[]>([]);
   const [place, setPlace] = useState<Place>({
@@ -44,6 +47,7 @@ function CafeAddForm({ handleClose }: CafeAddFormProps) {
     address: '',
     roadAddress: '',
   });
+  const [isLoaded, setIsLoaded] = useState<boolean>(true);
 
   useEffect(() => {
     const updateData = async () => {
@@ -65,6 +69,22 @@ function CafeAddForm({ handleClose }: CafeAddFormProps) {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoaded(false);
+
+    try {
+      await fetcher.post({
+        path: '/cafe',
+        bodyParams: { title: place.title, address: place.address },
+        accessToken,
+      });
+    } catch (e) {
+      if (isAxiosError<{ error: { code: string; message: string } }>(e)) {
+        console.error(e);
+      }
+    } finally {
+      setIsLoaded(true);
+    }
+    handleClose();
   };
 
   return (
@@ -79,7 +99,9 @@ function CafeAddForm({ handleClose }: CafeAddFormProps) {
             setPlace(newValue);
           }}
           inputValue={keyword}
-          onInputChange={(_, v) => setKeyword(v)}
+          onInputChange={(_, v) => {
+            setKeyword(v);
+          }}
           options={placeOption}
           noOptionsText="카페를 찾지 못했어요."
           getOptionLabel={(o) => (o.address ? `${o.title} - ${o.address}` : '')}
@@ -98,10 +120,12 @@ function CafeAddForm({ handleClose }: CafeAddFormProps) {
         />
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" type="submit">
+        <Button variant="contained" type="submit" disabled={!isLoaded}>
           추가
         </Button>
-        <Button onClick={handleClose}>취소</Button>
+        <Button onClick={handleClose} disabled={!isLoaded}>
+          취소
+        </Button>
       </DialogActions>
     </form>
   );
