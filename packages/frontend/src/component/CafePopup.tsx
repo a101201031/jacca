@@ -10,8 +10,8 @@ import {
 } from '@mui/material';
 import { fetcher, isAxiosError } from 'helper';
 import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { accessTokenAtom } from 'store';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { accessTokenAtom, alertSnackbarAtom } from 'store';
 
 interface CafeAddPopupProps {
   handleClose: () => void;
@@ -40,6 +40,7 @@ export function CafeAddPopup({ handleClose, isOpen }: CafeAddPopupProps) {
 
 function CafeAddForm({ handleClose }: CafeAddFormProps) {
   const accessToken = useRecoilValue(accessTokenAtom);
+  const setSnackbar = useSetRecoilState(alertSnackbarAtom);
   const [keyword, setKeyword] = useState<string>('');
   const [placeOption, setPlaceOption] = useState<Place[]>([]);
   const [place, setPlace] = useState<Place>({
@@ -77,14 +78,26 @@ function CafeAddForm({ handleClose }: CafeAddFormProps) {
         bodyParams: { title: place.title, address: place.address },
         accessToken,
       });
+      setSnackbar({
+        open: true,
+        severity: 'success',
+        message: '카페가 등록되었습니다.',
+      });
+      handleClose();
     } catch (e) {
-      if (isAxiosError<{ error: { code: string; message: string } }>(e)) {
-        console.error(e);
+      if (
+        isAxiosError<{ error: { code: string; message: string } }>(e) &&
+        e.response?.data.error.code === 'entity_already_exists'
+      ) {
+        setSnackbar({
+          open: true,
+          severity: 'error',
+          message: '카페가 이미 등록되어 있습니다.',
+        });
       }
     } finally {
       setIsLoaded(true);
     }
-    handleClose();
   };
 
   return (
