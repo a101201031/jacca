@@ -14,7 +14,9 @@ export function isAxiosError<T extends unknown>(
   return !!isObject(err) && 'isAxiosError' in err && err.isAxiosError === true;
 }
 
-export function isUserNotFoundError(err: Error | AxiosError | unknown) {
+export function isUserNotFoundError(
+  err: Error | AxiosError | unknown,
+): err is AxiosError<DefaultAxoisErrorTypes> {
   return (
     isAxiosError<DefaultAxoisErrorTypes>(err) &&
     err.response?.status === 404 &&
