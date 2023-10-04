@@ -10,10 +10,13 @@ import {
 import { styled } from '@mui/material/styles';
 import { CafeAddPopup, CafeCard } from 'component';
 import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { accessTokenAtom } from 'store';
 import { FlexBox } from 'style';
 
 export function CafeList() {
   const [cafeAddPopupOpen, setCafeAddPopupOpen] = useState(false);
+  const accessToken = useRecoilValue(accessTokenAtom);
 
   const cafeAddHandlOpen = () => {
     setCafeAddPopupOpen(true);
@@ -70,13 +73,17 @@ export function CafeList() {
             <Button variant="text">가까운 순</Button>
           </Box>
           <Box>
-            <Button variant="outlined" onClick={cafeAddHandlOpen}>
-              카페 등록하기
-            </Button>
-            <CafeAddPopup
-              isOpen={cafeAddPopupOpen}
-              handleClose={cafeAddHandleClose}
-            />
+            {accessToken && (
+              <>
+                <Button variant="outlined" onClick={cafeAddHandlOpen}>
+                  카페 등록하기
+                </Button>
+                <CafeAddPopup
+                  isOpen={cafeAddPopupOpen}
+                  handleClose={cafeAddHandleClose}
+                />
+              </>
+            )}
           </Box>
         </FlexBox>
         <FlexBox flexWrap="wrap" marginX="5.625rem">
