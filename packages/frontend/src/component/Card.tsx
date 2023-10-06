@@ -9,27 +9,41 @@ import {
 import { Link as RouterLink } from 'react-router-dom';
 import { CardContainer } from 'style';
 
-export function CafeCard() {
+interface CafeCardProps {
+  cafeId: string;
+  imageUrl: string;
+  title: string;
+  rating: number;
+  address: string;
+}
+
+export function CafeCard({
+  cafeId,
+  imageUrl,
+  title,
+  rating,
+  address,
+}: CafeCardProps) {
   return (
     <CardContainer>
-      <CardActionArea component={RouterLink} to={`/cafe/1`}>
+      <CardActionArea component={RouterLink} to={`/cafe/${cafeId}`}>
         <CardMedia
           component="img"
-          sx={{ width: '100%', position: 'relative' }}
-          image="https://images.unsplash.com/photo-1525193612562-0ec53b0e5d7c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+          sx={{ width: '100%', height: '200px', position: 'relative' }}
+          image={imageUrl}
         />
         <CardContent>
           <Typography gutterBottom variant="h3" component="div">
-            {`TEST 카페 `}
+            {`${title} `}
             <Typography variant="h3" display="inline" color="primary.dark">
-              {`2.6`}
+              {rating.toFixed(1)}
             </Typography>
           </Typography>
           <Typography variant="body1" noWrap={false}>
-            {`서울특별시 관악구`}
+            {address}
           </Typography>
           <Rating
-            value={2.5}
+            value={rating}
             readOnly
             precision={0.5}
             emptyIcon={

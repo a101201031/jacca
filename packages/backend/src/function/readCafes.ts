@@ -23,7 +23,15 @@ const handler: ValidatedHandler<
   });
 
   return formatJSONResponse({
-    cafes,
+    cafes: cafes.map((v) => ({
+      _id: v._id,
+      title: v.title,
+      address: v.address,
+      roadAddress: v.roadAddress,
+      rating: v.rating / 20,
+      tags: v.tags,
+      images: v.images,
+    })),
     paging: {
       limit,
       offset,

@@ -78,6 +78,14 @@ export const readCafesService: ReadCafesService = async ({
 
   const cafes = await CafeModel.find(filterQuery)
     .sort([[sortBy, orderBy]])
+    .select({
+      title: 1,
+      address: 1,
+      roadAddress: 1,
+      rating: 1,
+      tags: 1,
+      images: 1,
+    })
     .skip(offset)
     .limit(limit)
     .exec();

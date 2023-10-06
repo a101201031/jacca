@@ -8,10 +8,10 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { CafeAddPopup, CafeCard } from 'component';
+import { AsyncBoundary, CafeAddPopup, CafeCard } from 'component';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { accessTokenAtom } from 'store';
+import { accessTokenAtom, cafeListSelector } from 'store';
 import { FlexBox } from 'style';
 
 export function CafeList() {
@@ -60,12 +60,7 @@ export function CafeList() {
           </FormGroup>
         </Box>
       </FilterContainer>
-      <Box
-        width={'calc(100% - 260px)'}
-        height={'2000px'}
-        marginLeft={'260px'}
-        padding={'1rem'}
-      >
+      <Box width={'calc(100% - 260px)'} marginLeft={'260px'} padding={'1rem'}>
         <FlexBox justifyContent="space-between" width={'100%'}>
           <Box bgcolor={'#FAFAFA'}>
             <Button variant="text">별점 높은 순</Button>
@@ -87,14 +82,35 @@ export function CafeList() {
           </Box>
         </FlexBox>
         <FlexBox flexWrap="wrap" marginX="5.625rem">
-          {Array(20)
-            .fill(0)
-            .map((_, i) => (
-              <CafeCard key={i} />
-            ))}
+          <AsyncBoundary
+            suspenseFallback={<></>}
+            errorFallback={() => {
+              return <></>;
+            }}
+          >
+            <CafeListItems />
+          </AsyncBoundary>
         </FlexBox>
       </Box>
     </main>
+  );
+}
+
+function CafeListItems() {
+  const cafeList = useRecoilValue(cafeListSelector);
+  return (
+    <>
+      {cafeList.map((v) => (
+        <CafeCard
+          key={v._id}
+          cafeId={v._id}
+          title={v.title}
+          rating={v.rating}
+          address={v.address}
+          imageUrl={v.images[0].url}
+        />
+      ))}
+    </>
   );
 }
 
