@@ -24,6 +24,7 @@ module.exports = {
      * @description in rxjs effect operator and react useEffect, this rules is very annoying
      */
     'consistent-return': 'off',
+    'no-underscore-dangle': ['error', { 'allow': ['_id'] }],
   },
   ignorePatterns: ['.eslintrc.js'],
   settings: {
