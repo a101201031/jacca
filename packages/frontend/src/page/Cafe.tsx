@@ -10,61 +10,50 @@ import {
   ImageList,
   ImageListItem,
   Rating,
+  Toolbar,
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { AsyncBoundary } from 'component';
 import { useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { cafeInfoSelector } from 'store';
 import { FlexBox, MainContainer, Space } from 'style';
 
-const itemData = [
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Breakfast',
-    rows: 2,
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-    title: 'Coffee',
-    rows: 2,
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-    title: 'Burger',
-    rows: 2,
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-    title: 'Camera',
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-    title: 'Honey',
-    author: '@arwinneil',
-    cols: 2,
-  },
-];
-
-function srcset(image: string, size: number, rows = 1, cols = 1) {
-  return {
-    src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-    srcSet: `${image}?w=${size * cols}&h=${
-      size * rows
-    }&fit=crop&auto=format&dpr=2 2x`,
-  };
+export function Cafe() {
+  return (
+    <>
+      <Toolbar />
+      <MainContainer>
+        <AsyncBoundary
+          suspenseFallback={<></>}
+          errorFallback={() => {
+            return <></>;
+          }}
+        >
+          <CafeContent />
+        </AsyncBoundary>
+      </MainContainer>
+    </>
+  );
 }
 
-export function Cafe() {
+function CafeContent() {
+  const { cafeId } = useParams<{ cafeId: string }>() as Readonly<{
+    cafeId: string;
+  }>;
   const mapElement = useRef(null);
+  const cafeInfo = useRecoilValue(cafeInfoSelector({ cafeId }));
 
   useEffect(() => {
     const { naver } = window;
     if (!mapElement.current || !naver) return;
 
-    const location = new naver.maps.LatLng(37.5656, 126.9769);
+    const location = new naver.maps.LatLng(
+      cafeInfo.location.coordinates[1],
+      cafeInfo.location.coordinates[0],
+    );
     const mapOptions: naver.maps.MapOptions = {
       center: location,
       zoom: 17,
@@ -78,10 +67,10 @@ export function Cafe() {
       position: location,
       map,
     });
-  }, []);
+  }, [cafeInfo.location.coordinates]);
 
   return (
-    <MainContainer>
+    <>
       <Box sx={{ paddingX: '1rem' }}>
         <ImageList
           sx={{ width: '100%', height: '450px' }}
@@ -89,17 +78,9 @@ export function Cafe() {
           cols={8}
           rowHeight={220}
         >
-          {itemData.map((item) => (
-            <ImageListItem
-              key={item.img}
-              cols={item.cols || 1}
-              rows={item.rows || 1}
-            >
-              <img
-                {...srcset(item.img, 450, item.rows, item.cols)}
-                alt={item.title}
-                loading="lazy"
-              />
+          {cafeInfo.images.map((v) => (
+            <ImageListItem key={v._id} cols={2} rows={2}>
+              <img src={v.url} alt={v.title} />
             </ImageListItem>
           ))}
         </ImageList>
@@ -107,7 +88,7 @@ export function Cafe() {
           <FlexBox marginY="0.5rem">
             <FlexBox flexWrap="wrap" alignItems="center" marginY="0.5rem">
               <Typography marginRight="1rem" variant="h4">
-                TEST 카페 서울대입구점
+                {cafeInfo.title}
               </Typography>
               <Rating
                 value={2.6}
@@ -125,7 +106,7 @@ export function Cafe() {
                 marginLeft="1rem"
                 variant="h4"
               >
-                2.6
+                {cafeInfo.rating.toFixed(1)}
               </Typography>
             </FlexBox>
             <Space />
@@ -134,11 +115,13 @@ export function Cafe() {
               <Typography>리뷰 작성</Typography>
             </IconButton>
           </FlexBox>
-          <FlexBox flexWrap="wrap" marginY="0.5rem" columnGap="0.5rem">
-            <TagChip>코딩하기 좋은</TagChip>
-            <TagChip>1인</TagChip>
-            <TagChip>4인 이상</TagChip>
-          </FlexBox>
+          {!!cafeInfo.tags.length && (
+            <FlexBox flexWrap="wrap" marginY="0.5rem" columnGap="0.5rem">
+              {cafeInfo.tags.map((v) => (
+                <TagChip key={v._id}>{v.tag}</TagChip>
+              ))}
+            </FlexBox>
+          )}
           <FlexBox flexWrap="wrap" marginY="0.5rem" columnGap="0.5rem">
             <EditNoteOutlined fontSize="small" />
             <Typography variant="body1">2,031</Typography>
@@ -215,7 +198,7 @@ export function Cafe() {
         </CafeContentBox>
         <MapContainer ref={mapElement} />
       </FlexBox>
-    </MainContainer>
+    </>
   );
 }
 
