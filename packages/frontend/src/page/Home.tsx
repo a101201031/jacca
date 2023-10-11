@@ -1,6 +1,8 @@
 import { Box, Toolbar, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { CafeCard } from 'component';
+import { AsyncBoundary, CafeCard } from 'component';
+import { useRecoilValue } from 'recoil';
+import { cafeListAtomFamily } from 'store/atom/cafe';
 import { FlexBox } from 'style';
 
 export function Home() {
@@ -28,20 +30,41 @@ export function Home() {
         </Box>
       </MainHeader>
       <Box component="section" paddingY="2.38rem">
-        <Typography variant="h2" color="primary.dark" paddingX="5.625rem">
-          내 주변 카페 리스트
-        </Typography>
-        <Box marginTop="1.7rem">
-          <FlexBox flexWrap="wrap" marginX="5.625rem">
-            {Array(7)
-              .fill(0)
-              .map((_, i) => (
-                <CafeCard key={i} />
-              ))}
-          </FlexBox>
-        </Box>
+        <AsyncBoundary
+          suspenseFallback={<></>}
+          errorFallback={() => {
+            return <></>;
+          }}
+        >
+          <CafeSection />
+        </AsyncBoundary>
       </Box>
     </main>
+  );
+}
+
+function CafeSection() {
+  const cafeList = useRecoilValue(cafeListAtomFamily('key'));
+  return (
+    <>
+      <Typography variant="h2" color="primary.dark" paddingX="5.625rem">
+        내 주변 카페 리스트
+      </Typography>
+      <Box marginTop="1.7rem">
+        <FlexBox flexWrap="wrap" marginX="5.625rem">
+          {cafeList.map((v) => (
+            <CafeCard
+              key={v._id}
+              cafeId={v._id}
+              title={v.title}
+              rating={v.rating}
+              address={v.address}
+              imageUrl={v.images[0].url}
+            />
+          ))}
+        </FlexBox>
+      </Box>
+    </>
   );
 }
 
