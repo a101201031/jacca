@@ -1,24 +1,7 @@
 import { fetcher } from 'helper';
-import { Cafe } from 'model';
+import { Cafe, CafeListApiRes } from 'model';
 import { selector, selectorFamily } from 'recoil';
 import { selectorTrigger } from 'store';
-
-interface CafeListApiRes {
-  cafes: {
-    _id: string;
-    title: string;
-    address: string;
-    roadAddress: string;
-    rating: number;
-    images: { _id: string; title: string; url: string }[];
-    tags: string[];
-  }[];
-  paging: {
-    limit: number;
-    offset: number;
-    total: number;
-  };
-}
 
 export const cafeListSelector = selector({
   key: 'cafeListSelector',

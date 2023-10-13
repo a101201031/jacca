@@ -26,3 +26,20 @@ interface CafeTag {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface CafeListApiRes {
+  cafes: {
+    _id: string;
+    title: string;
+    address: string;
+    roadAddress: string;
+    rating: number;
+    images: { _id: string; title: string; url: string }[];
+    tags: string[];
+  }[];
+  paging: {
+    limit: number;
+    offset: number;
+    total: number;
+  };
+}
