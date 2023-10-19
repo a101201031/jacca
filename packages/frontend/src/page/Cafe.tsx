@@ -1,10 +1,12 @@
 import {
+  AddOutlined,
   EditNoteOutlined,
   PlaceOutlined,
   StarBorderOutlined,
 } from '@mui/icons-material';
 import {
   Box,
+  Button,
   Divider,
   IconButton,
   ImageList,
@@ -115,13 +117,13 @@ function CafeContent() {
               <Typography>리뷰 작성</Typography>
             </IconButton>
           </FlexBox>
-          {!!cafeInfo.tags.length && (
-            <FlexBox flexWrap="wrap" marginY="0.5rem" columnGap="0.5rem">
-              {cafeInfo.tags.map((v) => (
-                <TagChip key={v._id}>{v.tag}</TagChip>
-              ))}
-            </FlexBox>
-          )}
+          <FlexBox flexWrap="wrap" marginY="0.5rem">
+            {!!cafeInfo.tags.length &&
+              cafeInfo.tags.map((v) => <TagChip key={v._id}>{v.tag}</TagChip>)}
+            <TagChip>
+              테그 추가 <AddOutlined />
+            </TagChip>
+          </FlexBox>
           <FlexBox flexWrap="wrap" marginY="0.5rem" columnGap="0.5rem">
             <EditNoteOutlined fontSize="small" />
             <Typography variant="body1">2,031</Typography>
@@ -225,7 +227,7 @@ const DetailTd = styled('td')`
   padding-bottom: 5px px;
 `;
 
-const TagChip = styled('span')`
+const TagChip = styled(Button)`
   color: ${({ theme }) => theme.palette.primary.dark};
   background: ${({ theme }) => theme.palette.grey[100]};
   font-weight: 500;
