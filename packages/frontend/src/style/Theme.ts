@@ -11,6 +11,9 @@ export const defaultTheme = createTheme({
       main: '#815854',
       contrastText: '#fff',
     },
+    background: {
+      default: '#f0f0f3',
+    },
   },
   typography: {
     htmlFontSize: 16,
