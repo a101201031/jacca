@@ -2,12 +2,14 @@ import {
   AccountCircleOutlined,
   DarkModeOutlined,
   LightModeOutlined,
+  SearchOutlined,
 } from '@mui/icons-material';
 import type { ButtonProps } from '@mui/material';
 import {
   AppBar,
   Button,
   IconButton,
+  InputBase,
   Menu,
   MenuItem,
   Toolbar,
@@ -18,8 +20,32 @@ import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { firebaseUserAtom, userSelector } from 'store';
-import { Space } from 'style';
 import { LoginPopup } from './Login';
+
+const SearchContainer = styled('div')`
+  position: relative;
+  margin-left: 0;
+  margin-right: 1rem;
+  width: 100%;
+`;
+const SearchIconWrapper = styled('div')`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 1rem;
+  pointer-events: none;
+`;
+const SearchInputBase = styled(InputBase)`
+  width: 100%;
+  color: inherit;
+  & .MuiInputBase-input {
+    padding: 0.5rem 0.5rem 0.5rem 0;
+    width: 100%;
+  }
+  padding-left: 3rem;
+`;
 
 export function TopAppBar() {
   const [themeMode, setThemeMode] = useState('light');
@@ -42,7 +68,16 @@ export function TopAppBar() {
         <LogoButton component={RouterLink} to={'/'}>
           jacca
         </LogoButton>
-        <Space />
+        {/* <TextField sx={{ margin: 'auto' }} /> */}
+        <SearchContainer>
+          <SearchIconWrapper>
+            <SearchOutlined />
+          </SearchIconWrapper>
+          <SearchInputBase
+            placeholder="카페 이름으로 검색"
+            inputProps={{ 'aria-label': 'search' }}
+          />
+        </SearchContainer>
         <IconButton size="large" onClick={themeModeClick}>
           {themeMode === 'dark' ? (
             <DarkModeOutlined sx={{ fontSize: 28 }} />
