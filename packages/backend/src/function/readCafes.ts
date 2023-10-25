@@ -2,12 +2,12 @@ import type { ISchemaAny, ValidatedHandler } from '@lib/apiGateway';
 import { formatJSONResponse } from '@lib/apiGateway';
 import { middyfy } from '@lib/lambda';
 import { readCafesService } from '@service/cafe';
-import { readCafesQuerySchema } from '@validation/cafe';
+import { readCafesQueryParamSchema } from '@validation/cafe';
 
 const handler: ValidatedHandler<
   ISchemaAny,
   ISchemaAny,
-  typeof readCafesQuerySchema
+  typeof readCafesQueryParamSchema
 > = async (event) => {
   const { title, rating, tags, limit, offset, sortBy, orderBy } =
     event.queryStringParameters;
@@ -42,5 +42,5 @@ const handler: ValidatedHandler<
 
 export const readCafes = middyfy({
   handler,
-  eventSchema: { queryParameterSchema: readCafesQuerySchema },
+  eventSchema: { queryParameterSchema: readCafesQueryParamSchema },
 });

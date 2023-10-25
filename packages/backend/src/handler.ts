@@ -111,6 +111,19 @@ export const handler = {
       },
     ],
   },
+  readCafeTagsCount: {
+    handler: `${handlerPath(
+      __dirname,
+    )}/function/readCafeTagsCount.readCafeTagsCount`,
+    events: [
+      {
+        http: {
+          method: 'get',
+          path: 'cafe/tags/count',
+        },
+      },
+    ],
+  },
   createReview: {
     handler: `${handlerPath(__dirname)}/function/createReview.createReview`,
     events: [

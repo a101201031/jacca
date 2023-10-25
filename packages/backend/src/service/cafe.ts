@@ -41,7 +41,7 @@ type CreateCafeTagService = ({
   tag: string;
 }) => Promise<Cafe>;
 
-type ReadCafeTagsService = () => Promise<
+type ReadCafeTagsCountService = () => Promise<
   {
     id: string;
     tag: string;
@@ -149,7 +149,16 @@ export const addCafeTagService: CreateCafeTagService = async ({
   return cafe;
 };
 
-export const readCafeTagsService: ReadCafeTagsService = async () => {
+export const readCafeTagsService = async ({ tag }) => {
+  const cafeTags = await CafeTagModel.find({
+    tag: tag ? { $regex: new RegExp(tag, 'i') } : { $exists: true },
+  })
+    .sort([[tag, 'asc']])
+    .limit(5);
+  return cafeTags;
+};
+
+export const readCafeTagsCountService: ReadCafeTagsCountService = async () => {
   const cafeTags = await CafeModel.aggregate()
     .unwind('tags')
     .lookup({

@@ -14,7 +14,7 @@ export const cafePathParamSchema = object({
     }),
 });
 
-export const readCafesQuerySchema = object({
+export const readCafesQueryParamSchema = object({
   title: string().default(''),
   rating: number().min(0).max(100).default(0),
   tags: array()
@@ -37,4 +37,8 @@ export const readCafesQuerySchema = object({
 
 export const createCafeTagBodySchema = object({
   tag: string().required(),
+});
+
+export const readCafeTagsQueryParamSchema = object({
+  tag: string(),
 });
