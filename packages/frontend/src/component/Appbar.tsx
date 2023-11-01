@@ -68,7 +68,6 @@ export function TopAppBar() {
         <LogoButton component={RouterLink} to={'/'}>
           jacca
         </LogoButton>
-        {/* <TextField sx={{ margin: 'auto' }} /> */}
         <SearchContainer>
           <SearchIconWrapper>
             <SearchOutlined />
