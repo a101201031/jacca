@@ -16,11 +16,11 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { AsyncBoundary } from 'component';
-import { useEffect, useRef } from 'react';
+import { AsyncBoundary, CafeTagAddPopup } from 'component';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { cafeInfoSelector } from 'store';
+import { accessTokenAtom, cafeInfoSelector } from 'store';
 import { FlexBox, MainContainer, Space } from 'style';
 
 export function Cafe() {
@@ -42,6 +42,9 @@ export function Cafe() {
 }
 
 function CafeContent() {
+  const [cafeTagAddPopupOpen, setCafeTagAddPopupOpen] = useState(false);
+  const accessToken = useRecoilValue(accessTokenAtom);
+
   const { cafeId } = useParams<{ cafeId: string }>() as Readonly<{
     cafeId: string;
   }>;
@@ -70,6 +73,13 @@ function CafeContent() {
       map,
     });
   }, [cafeInfo.location.coordinates]);
+
+  const cafeTagAddHandlOpen = () => {
+    setCafeTagAddPopupOpen(true);
+  };
+  const cafeTagAddHandleClose = () => {
+    setCafeTagAddPopupOpen(false);
+  };
 
   return (
     <>
@@ -120,9 +130,18 @@ function CafeContent() {
           <FlexBox flexWrap="wrap" marginY="0.5rem">
             {!!cafeInfo.tags.length &&
               cafeInfo.tags.map((v) => <TagChip key={v._id}>{v.tag}</TagChip>)}
-            <TagChip>
-              테그 추가 <AddOutlined />
-            </TagChip>
+            {accessToken && (
+              <>
+                <TagChip onClick={cafeTagAddHandlOpen}>
+                  태그 추가 <AddOutlined />
+                </TagChip>
+                <CafeTagAddPopup
+                  cafeId={cafeId}
+                  handleClose={cafeTagAddHandleClose}
+                  isOpen={cafeTagAddPopupOpen}
+                />
+              </>
+            )}
           </FlexBox>
           <FlexBox flexWrap="wrap" marginY="0.5rem" columnGap="0.5rem">
             <EditNoteOutlined fontSize="small" />
