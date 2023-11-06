@@ -7,6 +7,7 @@ import {
   DialogTitle,
   TextField,
   Typography,
+  createFilterOptions,
 } from '@mui/material';
 import { fetcher, isAxiosError } from 'helper';
 import { useEffect, useState } from 'react';
@@ -40,6 +41,7 @@ interface Place {
 }
 
 interface Tag {
+  inputValue?: string;
   tag: string;
 }
 
@@ -169,14 +171,14 @@ function CafeAddForm({ handleClose }: CafeAddFormProps) {
   );
 }
 
+const cafeTagfilter = createFilterOptions<Tag>();
+
 function CafeTagAddForm({ cafeId, handleClose }: CafeTagAddFormProps) {
   const accessToken = useRecoilValue(accessTokenAtom);
   const setSnackbar = useSetRecoilState(alertSnackbarAtom);
   const [keyword, setKeyword] = useState<string>('');
   const [tagOption, setTagOption] = useState<Tag[]>([]);
-  const [tag, setTag] = useState<Tag>({
-    tag: '',
-  });
+  const [tag, setTag] = useState<Tag | null>(null);
   const [isLoaded, setIsLoaded] = useState<boolean>(true);
 
   useEffect(() => {
@@ -198,6 +200,15 @@ function CafeTagAddForm({ cafeId, handleClose }: CafeTagAddFormProps) {
   }, [keyword]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    if (!tag) {
+      setSnackbar({
+        open: true,
+        severity: 'error',
+        message: '태그를 설정해주세요.',
+      });
+      return;
+    }
+
     event.preventDefault();
     setIsLoaded(false);
 
@@ -235,10 +246,16 @@ function CafeTagAddForm({ cafeId, handleClose }: CafeTagAddFormProps) {
       <DialogContent dividers>
         <Typography gutterBottom>태그 검색</Typography>
         <Autocomplete
-          id="search-place"
+          id="tag"
           value={tag}
-          onChange={(_, newValue: any) => {
-            setTag(newValue);
+          onChange={(_, v) => {
+            if (typeof v === 'string') {
+              setTag({ tag: v });
+            } else if (v && v.inputValue) {
+              setTag({ tag: v.inputValue });
+            } else {
+              setTag(v);
+            }
           }}
           inputValue={keyword}
           onInputChange={(_, v) => {
@@ -246,10 +263,30 @@ function CafeTagAddForm({ cafeId, handleClose }: CafeTagAddFormProps) {
           }}
           options={tagOption}
           noOptionsText="태그를 찾지 못했어요."
-          getOptionLabel={(o) => o.tag}
-          filterOptions={(o) => o}
-          isOptionEqualToValue={(o, v) => o.tag === v.tag}
+          getOptionLabel={(o) => {
+            if (typeof o === 'string') {
+              return o;
+            }
+            if (o.inputValue) {
+              return o.inputValue;
+            }
+            return o.tag;
+          }}
+          filterOptions={(o, p) => {
+            const filtered = cafeTagfilter(o, p);
+            const { inputValue } = p;
+            const isExisting = o.some((v) => inputValue === v.tag);
+            if (inputValue !== '' && !isExisting) {
+              filtered.push({ inputValue, tag: `"${inputValue}" 만들기` });
+            }
+            return filtered;
+          }}
+          isOptionEqualToValue={(o, v) => {
+            return typeof v === 'string' && o.tag === v;
+          }}
           fullWidth
+          freeSolo
+          renderOption={(props, o) => <li {...props}>{o.tag}</li>}
           renderInput={(params) => (
             <TextField
               {...params}
