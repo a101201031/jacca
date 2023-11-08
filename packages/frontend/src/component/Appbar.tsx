@@ -26,7 +26,8 @@ const SearchContainer = styled('div')`
   position: relative;
   margin-left: 0;
   margin-right: 1rem;
-  width: 100%;
+  width: 80%;
+  flex-grow: 1;
 `;
 const SearchIconWrapper = styled('div')`
   position: absolute;
@@ -87,7 +88,11 @@ export function TopAppBar() {
         {user ? (
           <UserMenu />
         ) : (
-          <Button variant="contained" onClick={loginPopupClick}>
+          <Button
+            sx={{ minWidth: '84px' }}
+            variant="contained"
+            onClick={loginPopupClick}
+          >
             {`로그인`}
           </Button>
         )}
