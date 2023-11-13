@@ -5,6 +5,7 @@ import {
   StarBorderOutlined,
 } from '@mui/icons-material';
 import {
+  Avatar,
   Box,
   Button,
   Divider,
@@ -20,7 +21,7 @@ import { AsyncBoundary, CafeTagAddPopup } from 'component';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { accessTokenAtom, cafeInfoSelector } from 'store';
+import { accessTokenAtom, cafeInfoSelector, reviewListSelector } from 'store';
 import { FlexBox, MainContainer, Space } from 'style';
 
 export function Cafe() {
@@ -50,6 +51,7 @@ function CafeContent() {
   }>;
   const mapElement = useRef(null);
   const cafeInfo = useRecoilValue(cafeInfoSelector({ cafeId }));
+  const reviewList = useRecoilValue(reviewListSelector({ cafeId }));
 
   useEffect(() => {
     const { naver } = window;
@@ -219,6 +221,59 @@ function CafeContent() {
         </CafeContentBox>
         <MapContainer ref={mapElement} />
       </FlexBox>
+
+      <Box margin="1rem">
+        <Typography variant="h4">리뷰</Typography>
+        <Divider />
+        <FlexBox justifyContent="space-between" width={'100%'}>
+          <Box bgcolor={'#FAFAFA'}>
+            <Button variant="text">별점 높은 순</Button>
+            <Button variant="text">별점 낮은 순</Button>
+            <Button variant="text">최신순</Button>
+          </Box>
+        </FlexBox>
+        {reviewList.map((v) => (
+          <Box
+            key={v._id}
+            padding="20px"
+            border="1px solid #e6e6eb"
+            marginBottom="10px"
+          >
+            <FlexBox>
+              <Avatar>{v.userId.displayName}</Avatar>
+              <FlexBox marginLeft="1rem" flexDirection="column">
+                <Typography variant="body1">
+                  <Box component="span" fontWeight="600">
+                    사용자명
+                  </Box>
+                </Typography>
+                <FlexBox flexDirection="row" alignItems="center">
+                  <Rating
+                    value={4.5}
+                    size="small"
+                    readOnly
+                    precision={0.5}
+                    emptyIcon={
+                      <StarBorderOutlined
+                        style={{ opacity: 0.8 }}
+                        fontSize="inherit"
+                      />
+                    }
+                  />
+                  <Typography
+                    sx={{ color: (theme) => theme.palette.primary.dark }}
+                    marginLeft="0.5rem"
+                    variant="body1"
+                  >
+                    {4.5}
+                  </Typography>
+                </FlexBox>
+              </FlexBox>
+            </FlexBox>
+            <Typography variant="body2">{v.content}</Typography>
+          </Box>
+        ))}
+      </Box>
     </>
   );
 }
