@@ -51,7 +51,7 @@ type ReadCafeTagsCountService = () => Promise<
 
 export const readCafeService: ReadCafeService = async ({ id }) => {
   const cafe = await CafeModel.findById(id).populate('tags').exec();
-  return cafe;
+  return cafe.toObject();
 };
 
 export const readCafeByTitleService: ReadCafeByTitleService = async ({

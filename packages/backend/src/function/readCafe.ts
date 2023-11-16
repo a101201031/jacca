@@ -20,7 +20,7 @@ const handler: ValidatedHandler<
   }
 
   return formatJSONResponse({
-    cafe,
+    cafe: { ...cafe, rating: cafe.rating / 20 },
   });
 };
 
