@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { AsyncBoundary, CafeAddPopup, CafeCard } from 'component';
+import { AsyncBoundary, CafeAddForm, CafeCard, Popup } from 'component';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { accessTokenAtom, cafeListSelector } from 'store';
@@ -73,10 +73,13 @@ export function CafeList() {
                 <Button variant="outlined" onClick={cafeAddHandlOpen}>
                   카페 등록하기
                 </Button>
-                <CafeAddPopup
+                <Popup
                   isOpen={cafeAddPopupOpen}
-                  handleClose={cafeAddHandleClose}
-                />
+                  onClose={cafeAddHandleClose}
+                  fullWidth
+                >
+                  <CafeAddForm onClose={cafeAddHandleClose} />
+                </Popup>
               </>
             )}
           </Box>

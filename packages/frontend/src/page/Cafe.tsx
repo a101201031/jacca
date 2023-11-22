@@ -17,7 +17,7 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { AsyncBoundary, CafeTagAddPopup } from 'component';
+import { AsyncBoundary, CafeTagAddForm, Popup } from 'component';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
@@ -137,11 +137,16 @@ function CafeContent() {
                 <TagChip onClick={cafeTagAddHandlOpen}>
                   태그 추가 <AddOutlined />
                 </TagChip>
-                <CafeTagAddPopup
-                  cafeId={cafeId}
-                  handleClose={cafeTagAddHandleClose}
+                <Popup
                   isOpen={cafeTagAddPopupOpen}
-                />
+                  onClose={cafeTagAddHandleClose}
+                  fullWidth
+                >
+                  <CafeTagAddForm
+                    cafeId={cafeId}
+                    onClose={cafeTagAddHandleClose}
+                  />
+                </Popup>
               </>
             )}
           </FlexBox>

@@ -1,7 +1,6 @@
 import {
   Autocomplete,
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -14,24 +13,13 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { accessTokenAtom, alertSnackbarAtom } from 'store';
 
-interface CafeAddPopupProps {
-  handleClose: () => void;
-  isOpen: boolean;
-}
-
-interface CafeTagAddPopupProps {
-  cafeId: string;
-  handleClose: () => void;
-  isOpen: boolean;
-}
-
 interface CafeAddFormProps {
-  handleClose: () => void;
+  onClose: () => void;
 }
 
 interface CafeTagAddFormProps {
   cafeId: string;
-  handleClose: () => void;
+  onClose: () => void;
 }
 
 interface Place {
@@ -45,27 +33,7 @@ interface Tag {
   tag: string;
 }
 
-export function CafeAddPopup({ handleClose, isOpen }: CafeAddPopupProps) {
-  return (
-    <Dialog open={isOpen} onClose={handleClose} fullWidth={true}>
-      <CafeAddForm handleClose={handleClose} />
-    </Dialog>
-  );
-}
-
-export function CafeTagAddPopup({
-  cafeId,
-  handleClose,
-  isOpen,
-}: CafeTagAddPopupProps) {
-  return (
-    <Dialog open={isOpen} onClose={handleClose} fullWidth={true}>
-      <CafeTagAddForm handleClose={handleClose} cafeId={cafeId} />
-    </Dialog>
-  );
-}
-
-function CafeAddForm({ handleClose }: CafeAddFormProps) {
+export function CafeAddForm({ onClose }: CafeAddFormProps) {
   const accessToken = useRecoilValue(accessTokenAtom);
   const setSnackbar = useSetRecoilState(alertSnackbarAtom);
   const [keyword, setKeyword] = useState<string>('');
@@ -110,7 +78,7 @@ function CafeAddForm({ handleClose }: CafeAddFormProps) {
         severity: 'success',
         message: '카페가 등록되었습니다.',
       });
-      handleClose();
+      onClose();
     } catch (e) {
       if (
         isAxiosError<{ error: { code: string; message: string } }>(e) &&
@@ -163,7 +131,7 @@ function CafeAddForm({ handleClose }: CafeAddFormProps) {
         <Button variant="contained" type="submit" disabled={!isLoaded}>
           추가
         </Button>
-        <Button onClick={handleClose} disabled={!isLoaded}>
+        <Button onClick={onClose} disabled={!isLoaded}>
           취소
         </Button>
       </DialogActions>
@@ -173,7 +141,7 @@ function CafeAddForm({ handleClose }: CafeAddFormProps) {
 
 const cafeTagfilter = createFilterOptions<Tag>();
 
-function CafeTagAddForm({ cafeId, handleClose }: CafeTagAddFormProps) {
+export function CafeTagAddForm({ cafeId, onClose }: CafeTagAddFormProps) {
   const accessToken = useRecoilValue(accessTokenAtom);
   const setSnackbar = useSetRecoilState(alertSnackbarAtom);
   const [keyword, setKeyword] = useState<string>('');
@@ -223,7 +191,7 @@ function CafeTagAddForm({ cafeId, handleClose }: CafeTagAddFormProps) {
         severity: 'success',
         message: '태그가 등록되었습니다.',
       });
-      handleClose();
+      onClose();
     } catch (e) {
       if (
         isAxiosError<{ error: { code: string; message: string } }>(e) &&
@@ -300,7 +268,7 @@ function CafeTagAddForm({ cafeId, handleClose }: CafeTagAddFormProps) {
         <Button variant="contained" type="submit" disabled={!isLoaded}>
           추가
         </Button>
-        <Button onClick={handleClose} disabled={!isLoaded}>
+        <Button onClick={onClose} disabled={!isLoaded}>
           취소
         </Button>
       </DialogActions>
