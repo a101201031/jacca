@@ -1,6 +1,8 @@
+import { CafeModel } from '@model/cafe';
 import type { Review } from '@model/review';
 import { ReviewModel } from '@model/review';
 import { UserModel } from '@model/user';
+import { startSession } from 'mongoose';
 
 type CreateCafeService = ({
   userId,
@@ -20,7 +22,26 @@ export const createReviewService: CreateCafeService = async ({
   score,
   content = '',
 }) => {
+  const session = await startSession();
   const review = await ReviewModel.create({ userId, cafeId, score, content });
+  const averageResult = await ReviewModel.aggregate([
+    {
+      $match: { cafeId: review.cafeId },
+    },
+    {
+      $group: {
+        _id: null,
+        averageScore: { $avg: '$score' },
+      },
+    },
+  ]).exec();
+  const averageScore = averageResult[0] ? averageResult[0].averageScore : 0;
+  await CafeModel.findByIdAndUpdate(
+    cafeId,
+    { rating: averageScore },
+    { new: true },
+  );
+  await session.endSession();
   return review;
 };
 
