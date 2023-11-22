@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { AsyncBoundary, CafeTagAddForm, Popup } from 'component';
+import { ReviewAddForm } from 'component/ReviewForm';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
@@ -44,6 +45,7 @@ export function Cafe() {
 
 function CafeContent() {
   const [cafeTagAddPopupOpen, setCafeTagAddPopupOpen] = useState(false);
+  const [reviewAddPopupOpen, setReviewAddPopupOpen] = useState(false);
   const accessToken = useRecoilValue(accessTokenAtom);
 
   const { cafeId } = useParams<{ cafeId: string }>() as Readonly<{
@@ -76,11 +78,17 @@ function CafeContent() {
     });
   }, [cafeInfo.location.coordinates]);
 
-  const cafeTagAddHandlOpen = () => {
+  const cafeTagAddHandleOpen = () => {
     setCafeTagAddPopupOpen(true);
   };
   const cafeTagAddHandleClose = () => {
     setCafeTagAddPopupOpen(false);
+  };
+  const reviewAddHandleOpen = () => {
+    setReviewAddPopupOpen(true);
+  };
+  const reviewAddHandleClose = () => {
+    setReviewAddPopupOpen(false);
   };
 
   return (
@@ -124,17 +132,24 @@ function CafeContent() {
               </Typography>
             </FlexBox>
             <Space />
-            <IconButton sx={{ height: '100%' }}>
+            <IconButton sx={{ height: '100%' }} onClick={reviewAddHandleOpen}>
               <EditNoteOutlined fontSize="large" />
               <Typography>리뷰 작성</Typography>
             </IconButton>
+            <Popup
+              isOpen={reviewAddPopupOpen}
+              onClose={reviewAddHandleClose}
+              fullWidth
+            >
+              <ReviewAddForm cafeId={cafeId} onClose={reviewAddHandleClose} />
+            </Popup>
           </FlexBox>
           <FlexBox flexWrap="wrap" marginY="0.5rem">
             {!!cafeInfo.tags.length &&
               cafeInfo.tags.map((v) => <TagChip key={v._id}>{v.tag}</TagChip>)}
             {accessToken && (
               <>
-                <TagChip onClick={cafeTagAddHandlOpen}>
+                <TagChip onClick={cafeTagAddHandleOpen}>
                   태그 추가 <AddOutlined />
                 </TagChip>
                 <Popup
