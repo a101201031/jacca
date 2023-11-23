@@ -22,7 +22,7 @@ const handler: ValidatedHandler<
   });
 
   return formatJSONResponse({
-    reviews,
+    reviews: reviews.map((v) => ({ ...v, score: v.score / 20 })),
     paging: {
       limit,
       offset,

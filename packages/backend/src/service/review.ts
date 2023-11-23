@@ -81,7 +81,7 @@ export const readReviewsService = async ({
   const total = await ReviewModel.countDocuments(filterQuery).exec();
 
   return {
-    reviews,
+    reviews: reviews.map((v) => v.toObject()),
     total,
   };
 };
