@@ -5,13 +5,15 @@ import {
   DialogTitle,
   Rating,
   TextField,
+  Typography,
 } from '@mui/material';
-import { fetcher, isAxiosError } from 'helper';
+import { fetcher, isAxiosError, scoreToText } from 'helper';
 import { useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { Controller, useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { accessTokenAtom, alertSnackbarAtom } from 'store';
+import { FlexBox } from 'style';
 
 interface ReviewAddFormProps {
   onClose: () => void;
@@ -27,7 +29,7 @@ export function ReviewAddForm({ onClose, cafeId }: ReviewAddFormProps) {
   const setSnackbar = useSetRecoilState(alertSnackbarAtom);
 
   const [isLoaded, setIsLoaded] = useState(true);
-  const [score, setScore] = useState(1);
+  const [score, setScore] = useState(3);
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
@@ -69,15 +71,18 @@ export function ReviewAddForm({ onClose, cafeId }: ReviewAddFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <DialogTitle>카페 등록하기</DialogTitle>
+      <DialogTitle>리뷰 등록하기</DialogTitle>
       <DialogContent dividers>
-        <Rating
-          name="rating"
-          value={score}
-          onChange={(_, v) => {
-            setScore(v ?? 1);
-          }}
-        />
+        <FlexBox marginBottom="1rem" columnGap="1rem">
+          <Rating
+            name="rating"
+            value={score}
+            onChange={(_, v) => {
+              setScore(v ?? 1);
+            }}
+          />
+          <Typography>{scoreToText(score)}</Typography>
+        </FlexBox>
         <Controller
           name="content"
           control={control}

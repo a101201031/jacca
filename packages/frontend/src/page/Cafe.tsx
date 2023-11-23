@@ -19,6 +19,7 @@ import {
 import { styled } from '@mui/material/styles';
 import { AsyncBoundary, CafeTagAddForm, Popup } from 'component';
 import { ReviewAddForm } from 'component/ReviewForm';
+import { scoreToText } from 'helper';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
@@ -113,7 +114,7 @@ function CafeContent() {
                 {cafeInfo.title}
               </Typography>
               <Rating
-                value={2.6}
+                value={Number(cafeInfo.rating.toFixed(1))}
                 readOnly
                 precision={0.5}
                 emptyIcon={
@@ -264,12 +265,12 @@ function CafeContent() {
               <FlexBox marginLeft="1rem" flexDirection="column">
                 <Typography variant="body1">
                   <Box component="span" fontWeight="600">
-                    사용자명
+                    {v.userId.displayName}
                   </Box>
                 </Typography>
                 <FlexBox flexDirection="row" alignItems="center">
                   <Rating
-                    value={4.5}
+                    value={v.score}
                     size="small"
                     readOnly
                     precision={0.5}
@@ -285,7 +286,7 @@ function CafeContent() {
                     marginLeft="0.5rem"
                     variant="body1"
                   >
-                    {4.5}
+                    {scoreToText(v.score)}
                   </Typography>
                 </FlexBox>
               </FlexBox>
