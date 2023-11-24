@@ -35,7 +35,7 @@ export function CafeCard({
         <CardContent>
           <Typography gutterBottom variant="h3" component="div">
             {`${title} `}
-            <Typography variant="h3" display="inline" color="primary.dark">
+            <Typography variant="h3" display="inline" color="primary">
               {rating.toFixed(1)}
             </Typography>
           </Typography>

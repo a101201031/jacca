@@ -47,7 +47,7 @@ function CafeSection() {
   const cafeList = useRecoilValue(cafeListAtomFamily('key'));
   return (
     <>
-      <Typography variant="h2" color="primary.dark" paddingX="5.625rem">
+      <Typography variant="h2" color="primary" paddingX="5.625rem">
         내 주변 카페 리스트
       </Typography>
       <Box marginTop="1.7rem">

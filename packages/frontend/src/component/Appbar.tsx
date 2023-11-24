@@ -89,7 +89,9 @@ export function TopAppBar() {
           <UserMenu />
         ) : (
           <Button
-            sx={{ minWidth: '84px' }}
+            sx={{
+              minWidth: '84px',
+            }}
             variant="contained"
             onClick={loginPopupClick}
           >
@@ -110,6 +112,7 @@ interface LinkButtonProps extends ButtonProps {
 const LogoButton = styled(Button)<LinkButtonProps>`
   width: 100px;
   height: 33px;
+  color: ${({ theme }) => theme.palette.primary.light};
 `;
 
 function UserMenu() {
@@ -137,7 +140,7 @@ function UserMenu() {
 
   return (
     <>
-      <IconButton color="secondary" size="large" onClick={handleUserMenuOpen}>
+      <IconButton color="primary" size="large" onClick={handleUserMenuOpen}>
         <AccountCircleOutlined sx={{ fontSize: 34 }} />
       </IconButton>
       <Menu

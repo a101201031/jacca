@@ -4,7 +4,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
   Typography,
   createFilterOptions,
 } from '@mui/material';
@@ -12,6 +11,7 @@ import { fetcher, isAxiosError } from 'helper';
 import { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { accessTokenAtom, alertSnackbarAtom } from 'store';
+import { DefaultTextField } from 'style';
 
 interface CafeAddFormProps {
   onClose: () => void;
@@ -119,7 +119,7 @@ export function CafeAddForm({ onClose }: CafeAddFormProps) {
           }
           fullWidth
           renderInput={(params) => (
-            <TextField
+            <DefaultTextField
               {...params}
               margin="normal"
               label="카페 주소와 이름으로 검색해주세요"
@@ -256,7 +256,7 @@ export function CafeTagAddForm({ cafeId, onClose }: CafeTagAddFormProps) {
           freeSolo
           renderOption={(props, o) => <li {...props}>{o.tag}</li>}
           renderInput={(params) => (
-            <TextField
+            <DefaultTextField
               {...params}
               margin="normal"
               label="태그를 검색해주세요"

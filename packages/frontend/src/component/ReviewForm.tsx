@@ -4,7 +4,6 @@ import {
   DialogContent,
   DialogTitle,
   Rating,
-  TextField,
   Typography,
 } from '@mui/material';
 import { fetcher, isAxiosError, scoreToText } from 'helper';
@@ -13,7 +12,7 @@ import type { SubmitHandler } from 'react-hook-form';
 import { Controller, useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { accessTokenAtom, alertSnackbarAtom } from 'store';
-import { FlexBox } from 'style';
+import { DefaultTextField, FlexBox } from 'style';
 
 interface ReviewAddFormProps {
   onClose: () => void;
@@ -87,7 +86,13 @@ export function ReviewAddForm({ onClose, cafeId }: ReviewAddFormProps) {
           name="content"
           control={control}
           render={({ field }) => (
-            <TextField {...field} multiline fullWidth minRows={3} maxRows={6} />
+            <DefaultTextField
+              {...field}
+              multiline
+              fullWidth
+              minRows={3}
+              maxRows={6}
+            />
           )}
         />
       </DialogContent>

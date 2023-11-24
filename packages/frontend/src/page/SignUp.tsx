@@ -1,17 +1,11 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Avatar, Box, Button, Container, Typography } from '@mui/material';
 import { fetcher } from 'helper';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import type { Location } from 'react-router-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilRefresher_UNSTABLE, useRecoilValue } from 'recoil';
 import { accessTokenAtom, userSelector } from 'store';
+import { DefaultTextField } from 'style';
 
 type CustomLocationTypes = Omit<Location, 'state'> & {
   state?: { from?: { pathname: string } };
@@ -60,7 +54,7 @@ export function SignUp() {
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+        <Avatar sx={{ m: 1, bgcolor: 'primary.light' }}>
           <Typography>JC</Typography>
         </Avatar>
         <Typography variant="h1">{`회원가입`}</Typography>
@@ -79,7 +73,7 @@ export function SignUp() {
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
-                  <TextField
+                  <DefaultTextField
                     required
                     fullWidth
                     id="displayName"
@@ -98,7 +92,11 @@ export function SignUp() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{
+              mt: 3,
+              mb: 2,
+              backgroundColor: (theme) => theme.palette.primary.light,
+            }}
           >
             가입하기!
           </Button>

@@ -124,11 +124,7 @@ function CafeContent() {
                   />
                 }
               />
-              <Typography
-                sx={{ color: (theme) => theme.palette.primary.dark }}
-                marginLeft="1rem"
-                variant="h4"
-              >
+              <Typography color="primary" marginLeft="1rem" variant="h4">
                 {cafeInfo.rating.toFixed(1)}
               </Typography>
             </FlexBox>
@@ -282,7 +278,7 @@ function CafeContent() {
                     }
                   />
                   <Typography
-                    sx={{ color: (theme) => theme.palette.primary.dark }}
+                    sx={{ color: (theme) => theme.palette.primary.main }}
                     marginLeft="0.5rem"
                     variant="body1"
                   >
@@ -323,7 +319,7 @@ const DetailTd = styled('td')`
 `;
 
 const TagChip = styled(Button)`
-  color: ${({ theme }) => theme.palette.primary.dark};
+  color: ${({ theme }) => theme.palette.primary.main};
   background: ${({ theme }) => theme.palette.grey[100]};
   font-weight: 500;
   font-size: 1rem;
@@ -371,5 +367,5 @@ const ReviewContentGraphContainer = styled(Box)`
 `;
 const ReviewContentGraph = styled(Box)`
   height: 100%;
-  background-color: ${({ theme }) => theme.palette.primary.dark};
+  background-color: ${({ theme }) => theme.palette.primary.main};
 `;
