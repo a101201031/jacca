@@ -23,7 +23,12 @@ import { scoreToText } from 'helper';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { accessTokenAtom, cafeInfoSelector, reviewListSelector } from 'store';
+import {
+  accessTokenAtom,
+  cafeInfoSelector,
+  firebaseUserAtom,
+  reviewListSelector,
+} from 'store';
 import { FlexBox, MainContainer, Space } from 'style';
 
 export function Cafe() {
@@ -48,6 +53,8 @@ function CafeContent() {
   const [cafeTagAddPopupOpen, setCafeTagAddPopupOpen] = useState(false);
   const [reviewAddPopupOpen, setReviewAddPopupOpen] = useState(false);
   const accessToken = useRecoilValue(accessTokenAtom);
+  const firebaseUser = useRecoilValue(firebaseUserAtom);
+  const uid = firebaseUser?.uid;
 
   const { cafeId } = useParams<{ cafeId: string }>() as Readonly<{
     cafeId: string;
@@ -169,37 +176,8 @@ function CafeContent() {
         </Box>
       </Box>
       <Divider variant="middle" />
-      <FlexBox flexWrap="wrap" paddingY="1rem">
+      <FlexBox flexWrap="wrap" paddingY="1rem" justifyContent="center">
         <CafeContentBox>
-          <Box margin="1rem">
-            <Typography variant="h4">평가</Typography>
-            <Divider />
-            <Box marginY="0.5rem">
-              <Typography variant="h5">맛</Typography>
-              <Divider />
-              <ReviewContentContainer>
-                <ReviewContentTitle>생각보다 맛있어요</ReviewContentTitle>
-                <ReviewContentGraphContainer>
-                  <ReviewContentGraph width="70%" />
-                </ReviewContentGraphContainer>
-                70%
-              </ReviewContentContainer>
-              <ReviewContentContainer>
-                <ReviewContentTitle>보통이에요</ReviewContentTitle>
-                <ReviewContentGraphContainer>
-                  <ReviewContentGraph width="31%" />
-                </ReviewContentGraphContainer>
-                21%
-              </ReviewContentContainer>
-              <ReviewContentContainer>
-                <ReviewContentTitle>생각보다 별로에요</ReviewContentTitle>
-                <ReviewContentGraphContainer>
-                  <ReviewContentGraph width="9%" />
-                </ReviewContentGraphContainer>
-                9%
-              </ReviewContentContainer>
-            </Box>
-          </Box>
           <Box margin="1rem">
             <Typography variant="h4">정보</Typography>
             <Divider />
@@ -242,7 +220,7 @@ function CafeContent() {
       <Box margin="1rem">
         <Typography variant="h4">리뷰</Typography>
         <Divider />
-        <FlexBox justifyContent="space-between" width={'100%'}>
+        <FlexBox justifyContent="space-between" width="100%" marginY="1rem">
           <Box bgcolor={'#FAFAFA'}>
             <Button variant="text">별점 높은 순</Button>
             <Button variant="text">별점 낮은 순</Button>
@@ -255,6 +233,7 @@ function CafeContent() {
             padding="20px"
             border="1px solid #e6e6eb"
             marginBottom="10px"
+            maxWidth="720px"
           >
             <FlexBox>
               <Avatar>{v.userId.displayName}</Avatar>
@@ -286,6 +265,15 @@ function CafeContent() {
                   </Typography>
                 </FlexBox>
               </FlexBox>
+              {uid === v.userId._id && (
+                <>
+                  <Space />
+                  <Box>
+                    <Button>수정하기</Button>
+                    <Button color="secondary">삭제하기</Button>
+                  </Box>
+                </>
+              )}
             </FlexBox>
             <Typography variant="body2">{v.content}</Typography>
           </Box>
@@ -342,7 +330,7 @@ const CafeContentBox = styled(Box)`
 `;
 
 const MapContainer = styled(Box)`
-  width: 320px;
+  width: 640px;
   height: 320px;
   margin: auto;
   ${({ theme }) => theme.breakpoints.down('md')} {
