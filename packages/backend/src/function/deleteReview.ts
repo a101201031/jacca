@@ -39,7 +39,7 @@ const handler: ValidatedHandler<
   return formatJSONResponse({}, 204);
 };
 
-export const deleteCafe = middyfy({
+export const deleteReview = middyfy({
   handler,
   eventSchema: { pathParameterSchema: reviewPathParamSchema },
   requiredAuth: true,

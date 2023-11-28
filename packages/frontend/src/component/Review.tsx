@@ -3,15 +3,33 @@ import {
   Avatar,
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   Rating,
   Typography,
 } from '@mui/material';
-import { scoreToText } from 'helper';
+import { fetcher, isAxiosError, scoreToText } from 'helper';
 import { Review } from 'model';
-import { useRecoilValue } from 'recoil';
-import { firebaseUserAtom, reviewListSelector } from 'store';
+import { useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  accessTokenAtom,
+  alertSnackbarAtom,
+  firebaseUserAtom,
+  reviewListSelector,
+} from 'store';
 import { FlexBox, Space } from 'style';
+
+interface ReviewDeleteReminderProps {
+  reviewId: string;
+  content: string;
+  isOpen: boolean;
+  onClose: () => void;
+}
 
 export function ReviewComponent({ cafeId }: { cafeId: string }) {
   const reviewList = useRecoilValue(reviewListSelector({ cafeId }));
@@ -37,6 +55,15 @@ export function ReviewComponent({ cafeId }: { cafeId: string }) {
 function ReviewContent(review: Review) {
   const firebaseUser = useRecoilValue(firebaseUserAtom);
   const uid = firebaseUser?.uid;
+
+  const [deleteReminderOpen, setDeleteReminderOpen] = useState(false);
+
+  const reminderHandleOpen = () => {
+    setDeleteReminderOpen(true);
+  };
+  const reminderHandleClose = () => {
+    setDeleteReminderOpen(false);
+  };
   return (
     <Box
       padding="20px"
@@ -79,12 +106,73 @@ function ReviewContent(review: Review) {
             <Space />
             <Box>
               <Button>수정하기</Button>
-              <Button color="secondary">삭제하기</Button>
+              <Button color="secondary" onClick={reminderHandleOpen}>
+                삭제하기
+              </Button>
+              <DeleteReminder
+                reviewId={review._id}
+                content={review.content}
+                isOpen={deleteReminderOpen}
+                onClose={reminderHandleClose}
+              />
             </Box>
           </>
         )}
       </FlexBox>
       <Typography variant="body2">{review.content}</Typography>
     </Box>
+  );
+}
+
+function DeleteReminder({
+  reviewId,
+  content,
+  isOpen,
+  onClose,
+}: ReviewDeleteReminderProps) {
+  const accessToken = useRecoilValue(accessTokenAtom);
+  const setSnackbar = useSetRecoilState(alertSnackbarAtom);
+  const [isLoaded, setIsLoaded] = useState<boolean>(true);
+
+  const deleteHandleClick = async () => {
+    setIsLoaded(false);
+    try {
+      await fetcher.del({ path: `/review/${reviewId}`, accessToken });
+      setSnackbar({
+        open: true,
+        severity: 'success',
+        message: '리뷰가 삭제되었습니다.',
+      });
+      onClose();
+    } catch (e) {
+      if (
+        isAxiosError<{ error: { code: string; message: string } }>(e) &&
+        e.response?.data.error.code === 'entity_already_exists'
+      ) {
+        setSnackbar({
+          open: true,
+          severity: 'error',
+          message: '태그가 이미 등록되어 있습니다.',
+        });
+      }
+    } finally {
+      setIsLoaded(true);
+    }
+  };
+  return (
+    <Dialog open={isOpen} onClose={onClose} fullWidth>
+      <DialogTitle>정말 이 리뷰를 삭제할까요?</DialogTitle>
+      <DialogContent>
+        <DialogContentText>{content}</DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button disabled={!isLoaded} autoFocus onClick={onClose}>
+          취소
+        </Button>
+        <Button disabled={!isLoaded} color="error" onClick={deleteHandleClick}>
+          삭제하기
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
