@@ -5,7 +5,6 @@ import {
   StarBorderOutlined,
 } from '@mui/icons-material';
 import {
-  Avatar,
   Box,
   Button,
   Divider,
@@ -17,18 +16,17 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { AsyncBoundary, CafeTagAddForm, Popup } from 'component';
+import {
+  AsyncBoundary,
+  CafeTagAddForm,
+  Popup,
+  ReviewComponent,
+} from 'component';
 import { ReviewAddForm } from 'component/ReviewForm';
-import { scoreToText } from 'helper';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import {
-  accessTokenAtom,
-  cafeInfoSelector,
-  firebaseUserAtom,
-  reviewListSelector,
-} from 'store';
+import { accessTokenAtom, cafeInfoSelector } from 'store';
 import { FlexBox, MainContainer, Space } from 'style';
 
 export function Cafe() {
@@ -53,15 +51,12 @@ function CafeContent() {
   const [cafeTagAddPopupOpen, setCafeTagAddPopupOpen] = useState(false);
   const [reviewAddPopupOpen, setReviewAddPopupOpen] = useState(false);
   const accessToken = useRecoilValue(accessTokenAtom);
-  const firebaseUser = useRecoilValue(firebaseUserAtom);
-  const uid = firebaseUser?.uid;
 
   const { cafeId } = useParams<{ cafeId: string }>() as Readonly<{
     cafeId: string;
   }>;
   const mapElement = useRef(null);
   const cafeInfo = useRecoilValue(cafeInfoSelector({ cafeId }));
-  const reviewList = useRecoilValue(reviewListSelector({ cafeId }));
 
   useEffect(() => {
     const { naver } = window;
@@ -216,69 +211,7 @@ function CafeContent() {
         </CafeContentBox>
         <MapContainer ref={mapElement} />
       </FlexBox>
-
-      <Box margin="1rem">
-        <Typography variant="h4">리뷰</Typography>
-        <Divider />
-        <FlexBox justifyContent="space-between" width="100%" marginY="1rem">
-          <Box bgcolor={'#FAFAFA'}>
-            <Button variant="text">별점 높은 순</Button>
-            <Button variant="text">별점 낮은 순</Button>
-            <Button variant="text">최신순</Button>
-          </Box>
-        </FlexBox>
-        {reviewList.map((v) => (
-          <Box
-            key={v._id}
-            padding="20px"
-            border="1px solid #e6e6eb"
-            marginBottom="10px"
-            maxWidth="720px"
-          >
-            <FlexBox>
-              <Avatar>{v.userId.displayName}</Avatar>
-              <FlexBox marginLeft="1rem" flexDirection="column">
-                <Typography variant="body1">
-                  <Box component="span" fontWeight="600">
-                    {v.userId.displayName}
-                  </Box>
-                </Typography>
-                <FlexBox flexDirection="row" alignItems="center">
-                  <Rating
-                    value={v.score}
-                    size="small"
-                    readOnly
-                    precision={0.5}
-                    emptyIcon={
-                      <StarBorderOutlined
-                        style={{ opacity: 0.8 }}
-                        fontSize="inherit"
-                      />
-                    }
-                  />
-                  <Typography
-                    sx={{ color: (theme) => theme.palette.primary.main }}
-                    marginLeft="0.5rem"
-                    variant="body1"
-                  >
-                    {scoreToText(v.score)}
-                  </Typography>
-                </FlexBox>
-              </FlexBox>
-              {uid === v.userId._id && (
-                <>
-                  <Space />
-                  <Box>
-                    <Button>수정하기</Button>
-                    <Button color="secondary">삭제하기</Button>
-                  </Box>
-                </>
-              )}
-            </FlexBox>
-            <Typography variant="body2">{v.content}</Typography>
-          </Box>
-        ))}
-      </Box>
+      <ReviewComponent cafeId={cafeId} />
     </>
   );
 }
@@ -337,23 +270,4 @@ const MapContainer = styled(Box)`
     width: calc(100% - 1rem);
     height: 22vh;
   }
-`;
-
-const ReviewContentContainer = styled(Box)`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 340px;
-`;
-const ReviewContentTitle = styled(Box)`
-  width: 116px;
-`;
-const ReviewContentGraphContainer = styled(Box)`
-  width: 144px;
-  height: 15px;
-  background-color: ${({ theme }) => theme.palette.grey[300]};
-`;
-const ReviewContentGraph = styled(Box)`
-  height: 100%;
-  background-color: ${({ theme }) => theme.palette.primary.main};
 `;
