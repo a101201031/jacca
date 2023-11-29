@@ -25,6 +25,16 @@ export const readReviewsQueryParamSchema = object({
   (v) => !(!v.cafeId && !v.userId),
 );
 
+export const updateReviewBodySchema = object({
+  reviewId: string()
+    .required()
+    .test({
+      test: (v) => isValidObjectId(v),
+    }),
+  content: string(),
+  score: number().required(),
+});
+
 export const reviewPathParamSchema = object({
   reviewId: string().test({
     test: (v) => isValidObjectId(v),

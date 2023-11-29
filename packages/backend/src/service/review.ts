@@ -50,6 +50,49 @@ export const readReviewService: ReadReviewService = async ({ id }) => {
   return review;
 };
 
+export const updateReviewService = async ({
+  reviewId,
+  userId,
+  content,
+  score,
+}) => {
+  const { userId: originUserId, cafeId } = await ReviewModel.findById({
+    _id: reviewId,
+  }).exec();
+  if (originUserId !== userId) {
+    throw new Error('user permission denied');
+  }
+
+  const session = await startSession();
+  const review = await ReviewModel.findByIdAndUpdate(
+    reviewId,
+    {
+      content,
+      score,
+    },
+    { new: true },
+  ).exec();
+  const averageResult = await ReviewModel.aggregate([
+    {
+      $match: { cafeId: review.cafeId },
+    },
+    {
+      $group: {
+        _id: null,
+        averageScore: { $avg: '$score' },
+      },
+    },
+  ]).exec();
+  const averageScore = averageResult[0] ? averageResult[0].averageScore : 0;
+  await CafeModel.findByIdAndUpdate(
+    cafeId,
+    { rating: averageScore },
+    { new: true },
+  );
+  await session.endSession();
+  return review;
+};
+
 export const deleteReviewService = async ({ reviewId, userId }) => {
   const review = await ReviewModel.findById({ _id: reviewId }).exec();
   if (review.userId !== userId) {

@@ -146,6 +146,17 @@ export const handler = {
       },
     ],
   },
+  updateReview: {
+    handler: `${handlerPath(__dirname)}/function/updateReview.updateReview`,
+    events: [
+      {
+        http: {
+          method: 'put',
+          path: 'review',
+        },
+      },
+    ],
+  },
   deleteReview: {
     handler: `${handlerPath(__dirname)}/function/deleteReview.deleteReview`,
     events: [

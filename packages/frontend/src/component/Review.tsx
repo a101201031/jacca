@@ -23,6 +23,7 @@ import {
   reviewListSelector,
 } from 'store';
 import { FlexBox, Space } from 'style';
+import { ReviewEditForm } from './ReviewForm';
 
 interface ReviewDeleteReminderProps {
   reviewId: string;
@@ -56,7 +57,15 @@ function ReviewContent(review: Review) {
   const firebaseUser = useRecoilValue(firebaseUserAtom);
   const uid = firebaseUser?.uid;
 
+  const [editPopupOpen, setEditPopupOpen] = useState(false);
   const [deleteReminderOpen, setDeleteReminderOpen] = useState(false);
+
+  const editPopupHandleOpen = () => {
+    setEditPopupOpen(true);
+  };
+  const editPopupHandleClose = () => {
+    setEditPopupOpen(false);
+  };
 
   const reminderHandleOpen = () => {
     setDeleteReminderOpen(true);
@@ -105,10 +114,15 @@ function ReviewContent(review: Review) {
           <>
             <Space />
             <Box>
-              <Button>수정하기</Button>
+              <Button onClick={editPopupHandleOpen}>수정하기</Button>
               <Button color="secondary" onClick={reminderHandleOpen}>
                 삭제하기
               </Button>
+              <ReviewEditForm
+                {...review}
+                onClose={editPopupHandleClose}
+                isOpen={editPopupOpen}
+              />
               <DeleteReminder
                 reviewId={review._id}
                 content={review.content}
@@ -170,7 +184,7 @@ function DeleteReminder({
           취소
         </Button>
         <Button disabled={!isLoaded} color="error" onClick={deleteHandleClick}>
-          삭제하기
+          삭제
         </Button>
       </DialogActions>
     </Dialog>
