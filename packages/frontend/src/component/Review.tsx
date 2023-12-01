@@ -46,9 +46,17 @@ export function ReviewComponent({ cafeId }: { cafeId: string }) {
           <Button variant="text">최신순</Button>
         </Box>
       </FlexBox>
-      {reviewList.map((v) => (
-        <ReviewContent key={v._id} {...v} />
-      ))}
+      <FlexBox
+        flexWrap="wrap"
+        gap="1rem 1rem"
+        justifyContent="center"
+        width="720px"
+        marginX="auto"
+      >
+        {reviewList.map((v) => (
+          <ReviewContent key={v._id} {...v} />
+        ))}
+      </FlexBox>
     </Box>
   );
 }
@@ -74,12 +82,7 @@ function ReviewContent(review: Review) {
     setDeleteReminderOpen(false);
   };
   return (
-    <Box
-      padding="20px"
-      border="1px solid #e6e6eb"
-      marginBottom="10px"
-      maxWidth="720px"
-    >
+    <Box padding="20px" border="1px solid #e6e6eb" width="720px">
       <FlexBox>
         <Avatar>{review.userId.displayName}</Avatar>
         <FlexBox marginLeft="1rem" flexDirection="column">
@@ -133,7 +136,9 @@ function ReviewContent(review: Review) {
           </>
         )}
       </FlexBox>
-      <Typography variant="body2">{review.content}</Typography>
+      <Typography variant="body2" sx={{ whiteSpace: 'pre-line' }}>
+        {review.content}
+      </Typography>
     </Box>
   );
 }
