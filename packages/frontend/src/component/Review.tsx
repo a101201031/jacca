@@ -13,14 +13,14 @@ import {
   Typography,
 } from '@mui/material';
 import { fetcher, isAxiosError, scoreToText } from 'helper';
-import { Review } from 'model';
-import { useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import type { Review } from 'model';
+import { forwardRef, useCallback, useEffect, useState } from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   accessTokenAtom,
   alertSnackbarAtom,
   firebaseUserAtom,
-  reviewListSelector,
+  review2dListAtom,
 } from 'store';
 import { FlexBox, Space } from 'style';
 import { ReviewEditForm } from './ReviewForm';
@@ -33,7 +33,67 @@ interface ReviewDeleteReminderProps {
 }
 
 export function ReviewComponent({ cafeId }: { cafeId: string }) {
-  const reviewList = useRecoilValue(reviewListSelector({ cafeId }));
+  const REVIEW_LIST_LIMIT = 10;
+
+  const [review2dList, setReview2dList] = useRecoilState(review2dListAtom);
+  const [isLastReview, setIsLastReview] = useState<boolean>(false);
+  const [lastReviewRef, setLastReviewRef] = useState<HTMLDivElement | null>(
+    null,
+  );
+
+  useEffect(() => {
+    (async () => {
+      const { reviews, paging } = await fetcher.get<{
+        reviews: Review[];
+        paging: { limit: number; offset: number; total: number };
+      }>({
+        path: 'reviews',
+        queryParams: { cafeId, limit: `${REVIEW_LIST_LIMIT}` },
+      });
+      if (paging.offset + reviews.length === paging.total) {
+        setIsLastReview(true);
+      }
+      setReview2dList([reviews]);
+    })();
+  }, [cafeId, setReview2dList]);
+
+  const handleScroll = useCallback(
+    async ([{ isIntersecting }]: IntersectionObserverEntry[]) => {
+      if (!lastReviewRef) return;
+
+      if (isIntersecting) {
+        const { reviews, paging } = await fetcher.get<{
+          reviews: Review[];
+          paging: { limit: number; offset: number; total: number };
+        }>({
+          path: 'reviews',
+          queryParams: {
+            cafeId,
+            limit: `${REVIEW_LIST_LIMIT}`,
+            offset: `${REVIEW_LIST_LIMIT * review2dList.length}`,
+          },
+        });
+        if (paging.offset + reviews.length === paging.total) {
+          setIsLastReview(true);
+        }
+        setReview2dList([...review2dList, reviews]);
+      }
+    },
+    [cafeId, lastReviewRef, review2dList, setReview2dList],
+  );
+
+  useEffect(() => {
+    if (!lastReviewRef) return;
+    if (isLastReview) return;
+
+    let observer = new IntersectionObserver(handleScroll, {
+      threshold: 0.1,
+      rootMargin: '20px',
+    });
+    observer.observe(lastReviewRef);
+
+    return () => observer?.disconnect();
+  }, [handleScroll, isLastReview, lastReviewRef]);
 
   return (
     <Box margin="1rem">
@@ -53,15 +113,19 @@ export function ReviewComponent({ cafeId }: { cafeId: string }) {
         width="720px"
         marginX="auto"
       >
-        {reviewList.map((v) => (
-          <ReviewContent key={v._id} {...v} />
+        {([] as Review[]).concat(...review2dList).map((v, i, arr) => (
+          <RefReviewContent
+            key={v._id}
+            ref={i === arr.length - 1 ? setLastReviewRef : undefined}
+            {...v}
+          />
         ))}
       </FlexBox>
     </Box>
   );
 }
 
-function ReviewContent(review: Review) {
+const RefReviewContent = forwardRef((review: Review, ref) => {
   const firebaseUser = useRecoilValue(firebaseUserAtom);
   const uid = firebaseUser?.uid;
 
@@ -82,7 +146,7 @@ function ReviewContent(review: Review) {
     setDeleteReminderOpen(false);
   };
   return (
-    <Box padding="20px" border="1px solid #e6e6eb" width="720px">
+    <Box padding="20px" border="1px solid #e6e6eb" width="720px" ref={ref}>
       <FlexBox>
         <Avatar>{review.userId.displayName}</Avatar>
         <FlexBox marginLeft="1rem" flexDirection="column">
@@ -141,7 +205,7 @@ function ReviewContent(review: Review) {
       </Typography>
     </Box>
   );
-}
+});
 
 function DeleteReminder({
   reviewId,
