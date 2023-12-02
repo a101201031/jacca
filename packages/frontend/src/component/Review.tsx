@@ -20,7 +20,8 @@ import {
   accessTokenAtom,
   alertSnackbarAtom,
   firebaseUserAtom,
-  review2dListAtom,
+  infiniteScrollInfoAtomFamily,
+  infiniteScrollItem2dAtomFamily,
 } from 'store';
 import { FlexBox, Space } from 'style';
 import { ReviewEditForm } from './ReviewForm';
@@ -35,8 +36,13 @@ interface ReviewDeleteReminderProps {
 export function ReviewComponent({ cafeId }: { cafeId: string }) {
   const REVIEW_LIST_LIMIT = 10;
 
-  const [review2dList, setReview2dList] = useRecoilState(review2dListAtom);
-  const [isLastReview, setIsLastReview] = useState<boolean>(false);
+  const [review2dList, setReview2dList] = useRecoilState(
+    infiniteScrollItem2dAtomFamily<Review>('review'),
+  );
+  const [scrollInfo, setScrollInfo] = useRecoilState(
+    infiniteScrollInfoAtomFamily('review'),
+  );
+
   const [lastReviewRef, setLastReviewRef] = useState<HTMLDivElement | null>(
     null,
   );
@@ -50,12 +56,11 @@ export function ReviewComponent({ cafeId }: { cafeId: string }) {
         path: 'reviews',
         queryParams: { cafeId, limit: `${REVIEW_LIST_LIMIT}` },
       });
-      if (paging.offset + reviews.length === paging.total) {
-        setIsLastReview(true);
-      }
+      const isLast = reviews.length === paging.total;
+      setScrollInfo({ isLast, offset: REVIEW_LIST_LIMIT });
       setReview2dList([reviews]);
     })();
-  }, [cafeId, setReview2dList]);
+  }, [cafeId, setReview2dList, setScrollInfo]);
 
   const handleScroll = useCallback(
     async ([{ isIntersecting }]: IntersectionObserverEntry[]) => {
@@ -70,22 +75,28 @@ export function ReviewComponent({ cafeId }: { cafeId: string }) {
           queryParams: {
             cafeId,
             limit: `${REVIEW_LIST_LIMIT}`,
-            offset: `${REVIEW_LIST_LIMIT * review2dList.length}`,
+            offset: `${scrollInfo.offset}`,
           },
         });
-        if (paging.offset + reviews.length === paging.total) {
-          setIsLastReview(true);
-        }
+        const isLast = paging.offset + reviews.length === paging.total;
+        const offset = scrollInfo.offset + REVIEW_LIST_LIMIT;
+        setScrollInfo({ isLast, offset });
         setReview2dList([...review2dList, reviews]);
       }
     },
-    [cafeId, lastReviewRef, review2dList, setReview2dList],
+    [
+      cafeId,
+      lastReviewRef,
+      review2dList,
+      scrollInfo.offset,
+      setReview2dList,
+      setScrollInfo,
+    ],
   );
 
   useEffect(() => {
     if (!lastReviewRef) return;
-    if (isLastReview) return;
-
+    if (scrollInfo.isLast) return;
     let observer = new IntersectionObserver(handleScroll, {
       threshold: 0.1,
       rootMargin: '20px',
@@ -93,7 +104,7 @@ export function ReviewComponent({ cafeId }: { cafeId: string }) {
     observer.observe(lastReviewRef);
 
     return () => observer?.disconnect();
-  }, [handleScroll, isLastReview, lastReviewRef]);
+  }, [handleScroll, lastReviewRef, scrollInfo.isLast]);
 
   return (
     <Box margin="1rem">
