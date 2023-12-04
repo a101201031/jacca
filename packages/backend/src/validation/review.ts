@@ -19,7 +19,7 @@ export const readReviewsQueryParamSchema = object({
   limit: number().default(20),
   offset: number().min(0).default(0),
   sortBy: string().oneOf(['score', '_id']).default('_id'),
-  orderBy: string().oneOf(['asc', 'desc']).default('asc'),
+  orderBy: string().oneOf(['asc', 'desc']).default('desc'),
 }).test(
   'One of the cafeId or userId is required.',
   (v) => !(!v.cafeId && !v.userId),
