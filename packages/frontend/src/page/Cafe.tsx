@@ -23,7 +23,7 @@ import {
   ReviewComponent,
 } from 'component';
 import { ReviewAddForm } from 'component/ReviewForm';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { accessTokenAtom, cafeInfoSelector } from 'store';
@@ -84,15 +84,15 @@ function CafeContent() {
   const cafeTagAddHandleOpen = () => {
     setCafeTagAddPopupOpen(true);
   };
-  const cafeTagAddHandleClose = () => {
+  const cafeTagAddHandleClose = useCallback(() => {
     setCafeTagAddPopupOpen(false);
-  };
+  }, []);
   const reviewAddHandleOpen = () => {
     setReviewAddPopupOpen(true);
   };
-  const reviewAddHandleClose = () => {
+  const reviewAddHandleClose = useCallback(() => {
     setReviewAddPopupOpen(false);
-  };
+  }, []);
 
   return (
     <>

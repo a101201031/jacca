@@ -146,16 +146,16 @@ const RefReviewContent = forwardRef((review: Review, ref) => {
   const editPopupHandleOpen = () => {
     setEditPopupOpen(true);
   };
-  const editPopupHandleClose = () => {
+  const editPopupHandleClose = useCallback(() => {
     setEditPopupOpen(false);
-  };
+  }, []);
 
   const reminderHandleOpen = () => {
     setDeleteReminderOpen(true);
   };
-  const reminderHandleClose = () => {
+  const reminderHandleClose = useCallback(() => {
     setDeleteReminderOpen(false);
-  };
+  }, []);
   return (
     <Box padding="20px" border="1px solid #e6e6eb" width="720px" ref={ref}>
       <FlexBox>
