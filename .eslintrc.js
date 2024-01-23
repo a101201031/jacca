@@ -1,11 +1,12 @@
 module.exports = {
+  root: true,
   env: {
     browser: true,
-    es2021: true,
+    es2022: true,
     node: true,
+    jest: true,
   },
-  extends: ['plugin:react/recommended', 'airbnb', 'airbnb-typescript', 'prettier'],
-  parser: '@typescript-eslint/parser',
+  ignorePatterns: ['.eslintrc.js'],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -14,19 +15,52 @@ module.exports = {
     sourceType: 'module',
     project: './packages/backend/tsconfig.json'
   },
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+    'plugin:react/recommended',
+    'airbnb',
+    'airbnb-typescript',
+    'prettier',
+  ],
+  parser: '@typescript-eslint/parser',
   plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
-    'prettier/prettier': 'error',
-    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-    '@typescript-eslint/consistent-type-imports': 'warn',
+    'prettier/prettier': [
+      'error',
+      {
+        'endOfLine': 'auto',
+      },
+    ],
     'import/prefer-default-export': 'off',
-    /**
-     * @description in rxjs effect operator and react useEffect, this rules is very annoying
-     */
+    'import/no-import-module-exports': 'off',
+    'import/no-unresolved': 'error',
+    'import/no-extraneous-dependencies': 'off',
+    'no-unused-vars': 'off',
+    'no-console': 'off',
+    'class-methods-use-this': 'off',
+    'no-param-reassign': 'off',
+    'no-underscore-dangle': 'off',
+    'no-useless-constructor': 'off',
+    'no-empty-function': 'off',
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+      },
+    ],
     'consistent-return': 'off',
-    'no-underscore-dangle': ['error', { 'allow': ['_id'] }],
+    '@typescript-eslint/interface-name-prefix': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    '@typescript-eslint/consistent-type-imports': 'warn',
   },
-  ignorePatterns: ['.eslintrc.js'],
   settings: {
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
@@ -39,3 +73,4 @@ module.exports = {
     },
   },
 };
+
