@@ -36,3 +36,6 @@ lerna-debug.log*
 
 # Environment
 .env*
+
+# Firebase Service Key
+*adminsdk*.json
