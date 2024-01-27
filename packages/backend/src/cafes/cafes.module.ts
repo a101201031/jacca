@@ -5,6 +5,7 @@ import { CafesHttpModule } from './cafes-http';
 import { CafesController } from './cafes.controller';
 import { CafesService } from './cafes.service';
 import { Cafe, CafeSchema } from './schemas';
+import { CafesRepository } from './cafes.repository';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { Cafe, CafeSchema } from './schemas';
     MongooseModule.forFeature([{ name: Cafe.name, schema: CafeSchema }]),
   ],
   controllers: [CafesController],
-  providers: [CafesService],
+  providers: [CafesService, CafesRepository],
 })
 export class CafesModule {}

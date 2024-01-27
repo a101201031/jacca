@@ -4,38 +4,38 @@ import { Model } from 'mongoose';
 import { CafesHttpService } from './cafes-http';
 import type { CreateCafeDto } from './dto';
 import { Cafe } from './schemas';
+import { CafesRepository } from './cafes.repository';
 
 @Injectable()
 export class CafesService {
   constructor(
-    @InjectModel(Cafe.name) private cafeModel: Model<Cafe>,
-    private readonly cafeHttpService: CafesHttpService,
+    private readonly cafesRepository: CafesRepository,
+    private readonly cafesHttpService: CafesHttpService,
   ) {}
 
   async create(createCafeDto: CreateCafeDto) {
     const { address, roadAddress, lng, lat } =
-      await this.cafeHttpService.findGeocodeByQuery({
+      await this.cafesHttpService.findGeocodeByQuery({
         query: createCafeDto.address,
       });
-    const images = await this.cafeHttpService.findPlaceImage({
+    const images = await this.cafesHttpService.findPlaceImage({
       query: createCafeDto.title,
     });
-
     const location = { type: 'Point', coordinates: [Number(lng), Number(lat)] };
-    return this.cafeModel.create({
-      title: createCafeDto.title,
+
+    return this.cafesRepository.create(createCafeDto, {
       address,
       roadAddress,
-      location,
       images,
+      location,
     });
   }
 
-  findAll() {
-    return this.cafeModel.find().exec();
+  async findAll() {
+    return this.cafesRepository.findAll();
   }
 
-  findOneById(id) {
-    return this.cafeModel.findById(id).exec();
+  async findOneById(id) {
+    return this.cafesRepository.findOneById(id);
   }
 }
