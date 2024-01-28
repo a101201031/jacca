@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CafesService } from './cafes.service';
 import { CreateCafeDto } from './dto';
 
@@ -21,5 +21,10 @@ export class CafesController {
   async findOne(@Param('id') id: string) {
     const cafe = await this.cafesService.findOneById(id);
     return cafe;
+  }
+
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    await this.cafesService.remove(id);
   }
 }

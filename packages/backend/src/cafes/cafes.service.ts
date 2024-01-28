@@ -38,4 +38,8 @@ export class CafesService {
   async findOneById(id) {
     return this.cafesRepository.findOneById(id);
   }
+
+  async remove(id) {
+    return this.cafesRepository.remove(id);
+  }
 }
