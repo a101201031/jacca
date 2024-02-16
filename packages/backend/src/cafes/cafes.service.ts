@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import type { PaginationDto } from '@src/common';
 import { CafesHttpService } from './cafes-http';
-import type { CreateCafeDto } from './dto';
-import { Cafe } from './schemas';
 import { CafesRepository } from './cafes.repository';
+import type { CreateCafeDto, FindAllCafeRequestDto } from './dto';
 
 @Injectable()
 export class CafesService {
@@ -31,8 +29,37 @@ export class CafesService {
     });
   }
 
-  async findAll() {
-    return this.cafesRepository.findAll();
+  async findAll(
+    { title, rating, sortBy, orderBy }: FindAllCafeRequestDto,
+    { limit, offset }: PaginationDto,
+  ) {
+    const filterQuery = {
+      title: title ? { $regex: new RegExp(title, 'i') } : { $exists: true },
+      rating: { $gte: rating },
+    };
+    const cafes = await this.cafesRepository.findAll(
+      filterQuery,
+      { sortBy, orderBy },
+      { limit, offset },
+    );
+    const total = await this.cafesRepository.countDocument(filterQuery);
+
+    return {
+      data: cafes.map((v) => ({
+        _id: v._id,
+        title: v.title,
+        address: v.address,
+        roadAddress: v.roadAddress,
+        rating: v.rating / 20,
+        tags: v.tags,
+        images: v.images,
+      })),
+      paging: {
+        limit,
+        offset,
+        total,
+      },
+    };
   }
 
   async findOneById(id) {

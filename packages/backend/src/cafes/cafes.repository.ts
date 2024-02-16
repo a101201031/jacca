@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import type { InferSchemaType } from 'mongoose';
+import type { FilterQuery, InferSchemaType } from 'mongoose';
 import { Model } from 'mongoose';
 import type { CreateCafeDto } from './dto';
 import type { CafeSchema } from './schemas';
@@ -31,8 +31,32 @@ export class CafesRepository {
     });
   }
 
-  async findAll() {
-    return this.cafeModel.find().exec();
+  async findAll(
+    filterQuery: FilterQuery<Cafe>,
+    {
+      sortBy,
+      orderBy,
+    }: { sortBy: 'title' | 'rating' | '_id'; orderBy: 'asc' | 'desc' },
+    { limit, offset }: { limit: number; offset: number },
+  ) {
+    return this.cafeModel
+      .find(filterQuery)
+      .sort([[sortBy, orderBy]])
+      .select({
+        title: 1,
+        address: 1,
+        roadAddress: 1,
+        rating: 1,
+        tags: 1,
+        images: 1,
+      })
+      .skip(offset)
+      .limit(limit)
+      .exec();
+  }
+
+  async countDocument(filterQuery: FilterQuery<Cafe>) {
+    return this.cafeModel.countDocuments(filterQuery).exec();
   }
 
   async findOneById(id) {

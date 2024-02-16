@@ -5,12 +5,18 @@ import {
   Get,
   Param,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { FirebaseAuthGuard } from '@src/common';
+import {
+  FirebaseAuthGuard,
+  PaginationDto,
+  PaginationQuery,
+  ApiPaginationQuery,
+} from '@src/common';
 import { CafesService } from './cafes.service';
-import { CreateCafeDto } from './dto';
+import { CreateCafeDto, FindAllCafeRequestDto } from './dto';
 
 @ApiTags('cafes')
 @Controller('cafes')
@@ -25,10 +31,13 @@ export class CafesController {
     return this.cafesService.create(createCafeDto);
   }
 
+  @ApiPaginationQuery()
   @Get()
-  async findAll() {
-    const cafes = await this.cafesService.findAll();
-    return cafes;
+  async findAll(
+    @PaginationQuery() pagination: PaginationDto,
+    @Query() findAllCafeRequestDto: FindAllCafeRequestDto,
+  ) {
+    return this.cafesService.findAll(findAllCafeRequestDto, pagination);
   }
 
   @Get(':id')
