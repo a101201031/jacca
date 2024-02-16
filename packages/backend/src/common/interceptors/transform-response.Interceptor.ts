@@ -8,13 +8,33 @@ import type { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable()
-export class TransformResponseInterceptor<T>
-  implements NestInterceptor<T, { data: T }>
+export class TransformResponseInterceptor
+  implements NestInterceptor<any, { data: any; paging?: any }>
 {
   intercept(
     _: ExecutionContext,
-    next: CallHandler<T>,
-  ): Observable<{ data: T }> {
-    return next.handle().pipe(map((data) => ({ data })));
+    next: CallHandler,
+  ): Observable<{ data: any; paging?: any }> {
+    return next.handle().pipe(
+      map((response) => {
+        if (this.hasDataAndPaging(response)) {
+          const { paging } = response;
+          const { data } = response;
+
+          return {
+            data,
+            paging,
+          };
+        }
+        return { data: response };
+      }),
+    );
+  }
+
+  private hasDataAndPaging(response: any): response is {
+    data: [];
+    paging: { limit: number; offset: number; total: number };
+  } {
+    return Array.isArray(response.data) && response.paging !== undefined;
   }
 }
