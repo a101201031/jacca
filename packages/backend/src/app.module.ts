@@ -2,12 +2,13 @@ import type { MiddlewareConsumer, NestModule, Provider } from '@nestjs/common';
 import { Module, ValidationPipe } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { BootstrapModule } from './bootstrap';
-import { CafesModule } from './cafes/cafes.module';
+import { CafesModule } from './cafes';
 import {
   AllExceptionsFilter,
   RequestLoggerMiddleware,
   TransformResponseInterceptor,
 } from './common';
+import { UsersModule } from './users';
 
 const globalProviders: Provider[] = [
   {
@@ -26,7 +27,7 @@ const globalProviders: Provider[] = [
   },
 ];
 @Module({
-  imports: [BootstrapModule, CafesModule],
+  imports: [BootstrapModule, CafesModule, UsersModule],
   controllers: [],
   providers: [...globalProviders],
 })
