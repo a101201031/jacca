@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import type { FilterQuery, InferSchemaType } from 'mongoose';
 import { Model } from 'mongoose';
-import type { CreateCafeDto } from './dto';
+import type { PaginationDto } from '@src/common';
+import type { CreateCafeDto, FindAllCafesDto } from './dto';
 import type { CafeSchema } from './schemas';
 import { Cafe } from './schemas';
 
@@ -36,8 +37,11 @@ export class CafesRepository {
     {
       sortBy,
       orderBy,
-    }: { sortBy: 'title' | 'rating' | '_id'; orderBy: 'asc' | 'desc' },
-    { limit, offset }: { limit: number; offset: number },
+    }: {
+      sortBy: FindAllCafesDto['sortBy'];
+      orderBy: FindAllCafesDto['orderBy'];
+    },
+    { limit, offset }: PaginationDto,
   ) {
     return this.cafeModel
       .find(filterQuery)
@@ -52,18 +56,19 @@ export class CafesRepository {
       })
       .skip(offset)
       .limit(limit)
+      .lean()
       .exec();
   }
 
   async countDocument(filterQuery: FilterQuery<Cafe>) {
-    return this.cafeModel.countDocuments(filterQuery).exec();
+    return this.cafeModel.countDocuments(filterQuery).lean().exec();
   }
 
   async findOneById(id) {
-    return this.cafeModel.findById(id).exec();
+    return this.cafeModel.findById(id).lean().exec();
   }
 
   async remove(id) {
-    await this.cafeModel.findByIdAndDelete(id).exec();
+    await this.cafeModel.findByIdAndDelete(id).lean().exec();
   }
 }

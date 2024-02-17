@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import type { PaginationDto } from '@src/common';
 import { CafesHttpService } from './cafes-http';
 import { CafesRepository } from './cafes.repository';
-import type { CreateCafeDto, FindAllCafeRequestDto } from './dto';
+import type { CreateCafeDto, FindAllCafesDto } from './dto';
 
 @Injectable()
 export class CafesService {
@@ -30,7 +30,7 @@ export class CafesService {
   }
 
   async findAll(
-    { title, rating, sortBy, orderBy }: FindAllCafeRequestDto,
+    { title, rating, sortBy, orderBy }: FindAllCafesDto,
     { limit, offset }: PaginationDto,
   ) {
     const filterQuery = {
@@ -46,13 +46,8 @@ export class CafesService {
 
     return {
       data: cafes.map((v) => ({
-        _id: v._id,
-        title: v.title,
-        address: v.address,
-        roadAddress: v.roadAddress,
+        ...v,
         rating: v.rating / 20,
-        tags: v.tags,
-        images: v.images,
       })),
       paging: {
         limit,

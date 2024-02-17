@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsIn, IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class FindAllCafeRequestDto {
+export class FindAllCafesDto {
   @IsOptional()
   @IsString()
   title?: string = '';
@@ -17,5 +17,5 @@ export class FindAllCafeRequestDto {
 
   @IsOptional()
   @IsIn(['asc', 'desc'])
-  orderBy?: 'asc' | 'desc' = 'asc';
+  orderBy?: 'asc' | 'desc' = 'desc';
 }

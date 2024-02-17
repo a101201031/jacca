@@ -16,7 +16,7 @@ import {
   ApiPaginationQuery,
 } from '@src/common';
 import { CafesService } from './cafes.service';
-import { CreateCafeDto, FindAllCafeRequestDto } from './dto';
+import { CreateCafeDto, FindAllCafesDto } from './dto';
 
 @ApiTags('cafes')
 @Controller('cafes')
@@ -34,10 +34,10 @@ export class CafesController {
   @ApiPaginationQuery()
   @Get()
   async findAll(
-    @PaginationQuery() pagination: PaginationDto,
-    @Query() findAllCafeRequestDto: FindAllCafeRequestDto,
+    @PaginationQuery() paginationDto: PaginationDto,
+    @Query() findAllCafesDto: FindAllCafesDto,
   ) {
-    return this.cafesService.findAll(findAllCafeRequestDto, pagination);
+    return this.cafesService.findAll(findAllCafesDto, paginationDto);
   }
 
   @Get(':id')

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Schema as MongooseSchema } from 'mongoose';
 import type { HydratedDocument } from 'mongoose';
-import mongoose from 'mongoose';
 import { CafeTag } from './cafe-tag.schema';
 
 export type CafeDocument = HydratedDocument<Cafe>;
@@ -33,8 +33,8 @@ export class Cafe {
   })
   location: Record<string, any>;
 
-  @Prop([{ type: mongoose.Types.ObjectId, ref: CafeTag.name }])
-  tags: mongoose.Types.ObjectId[];
+  @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: CafeTag.name }] })
+  tags: CafeTag[];
 
   @Prop([{ title: String, url: String }])
   images: Record<string, any>[];
