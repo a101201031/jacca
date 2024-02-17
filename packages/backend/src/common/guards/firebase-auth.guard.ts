@@ -2,6 +2,11 @@ import type { CanActivate, ExecutionContext } from '@nestjs/common';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { FirebaseAdminService } from '@src/firebase-admin';
 import type { Request } from 'express';
+import type { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
+
+export interface RequestWithFirebaseAuth extends Request {
+  user: DecodedIdToken;
+}
 
 @Injectable()
 export class FirebaseAuthGuard implements CanActivate {
