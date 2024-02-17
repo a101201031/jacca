@@ -8,6 +8,7 @@ import {
   RequestLoggerMiddleware,
   TransformResponseInterceptor,
 } from './common';
+import { ReviewsModule } from './reviews';
 import { UsersModule } from './users';
 
 const globalProviders: Provider[] = [
@@ -27,7 +28,7 @@ const globalProviders: Provider[] = [
   },
 ];
 @Module({
-  imports: [BootstrapModule, CafesModule, UsersModule],
+  imports: [BootstrapModule, CafesModule, UsersModule, ReviewsModule],
   controllers: [],
   providers: [...globalProviders],
 })
