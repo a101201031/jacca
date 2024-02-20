@@ -7,8 +7,8 @@ import { CafesHttpService } from './cafes-http.service';
 export class CafesHttpController {
   constructor(private cafesHttpService: CafesHttpService) {}
 
-  @Get()
   @ApiOkResponse()
+  @Get()
   async find(@Query('query') query: string) {
     return this.cafesHttpService.findPlace({ query });
   }

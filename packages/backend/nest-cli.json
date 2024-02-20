@@ -9,8 +9,7 @@
         "name": "@nestjs/swagger",
         "options": {
           "dtoFileNameSuffix": [
-            ".dto.ts",
-            ".schema.ts"
+            ".dto.ts"
           ],
           "classValidatorShim": true
         }

@@ -11,7 +11,9 @@ async function bootstrap() {
 
   const swaggerConfig = buildSwaggerConfig(appConfig.name, 'jacca의 API Docs');
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document, {
+    swaggerOptions: { defaultModelsExpandDepth: -1 },
+  });
 
   await app.listen(appConfig.port);
 }

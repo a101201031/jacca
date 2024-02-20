@@ -3,17 +3,19 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import {
+  ApiPaginationQuery,
   FirebaseAuthGuard,
   PaginationDto,
   PaginationQuery,
-  ApiPaginationQuery,
 } from '@src/common';
 import { CafesService } from './cafes.service';
 import { CreateCafeDto, FindAllCafesDto } from './dto';
@@ -24,7 +26,6 @@ export class CafesController {
   constructor(private cafesService: CafesService) {}
 
   @ApiBearerAuth('access-token')
-  @ApiCreatedResponse()
   @UseGuards(FirebaseAuthGuard)
   @Post()
   async create(@Body() createCafeDto: CreateCafeDto) {
@@ -46,6 +47,7 @@ export class CafesController {
     return cafe;
   }
 
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     await this.cafesService.remove(id);
