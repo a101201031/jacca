@@ -5,7 +5,7 @@ import { CafesHttpService } from './cafes-http.service';
 @ApiTags('place')
 @Controller('place')
 export class CafesHttpController {
-  constructor(private cafesHttpService: CafesHttpService) {}
+  constructor(private readonly cafesHttpService: CafesHttpService) {}
 
   @ApiOkResponse()
   @Get()

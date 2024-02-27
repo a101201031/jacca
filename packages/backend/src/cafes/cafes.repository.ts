@@ -15,20 +15,17 @@ interface CreateCafeAdditional
 
 @Injectable()
 export class CafesRepository {
-  constructor(@InjectModel(Cafe.name) private cafeModel: Model<Cafe>) {}
+  constructor(
+    @InjectModel(Cafe.name) private readonly cafeModel: Model<Cafe>,
+  ) {}
 
   async create(
     createCafeDto: CreateCafeDto,
     createCafeAdditional: CreateCafeAdditional,
   ) {
-    const { title } = createCafeDto;
-    const { address, roadAddress, location, images } = createCafeAdditional;
     return this.cafeModel.create({
-      title,
-      address,
-      roadAddress,
-      location,
-      images,
+      ...createCafeDto,
+      ...createCafeAdditional,
     });
   }
 

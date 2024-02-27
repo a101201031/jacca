@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ThirdPartyConfigService {
-  constructor(private configService: ConfigService) {}
+  constructor(private readonly configService: ConfigService) {}
 
   get naver_client_id(): string {
     return this.configService.get<string>('third-party.naver_client_id');

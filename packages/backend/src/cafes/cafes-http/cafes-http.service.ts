@@ -6,9 +6,9 @@ import { firstValueFrom, map } from 'rxjs';
 
 @Injectable()
 export class CafesHttpService {
-  private searchApiBaseUrl: string;
+  private readonly searchApiBaseUrl: string;
 
-  private geocodeApiBaseUrl: string;
+  private readonly geocodeApiBaseUrl: string;
 
   constructor(
     private readonly httpService: HttpService,

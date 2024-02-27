@@ -8,7 +8,9 @@ interface CreateUserAdditional extends Pick<User, '_id' | 'email'> {}
 
 @Injectable()
 export class UsersRepository {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+  ) {}
 
   async create(
     createUserDto: CreateUserDto,
