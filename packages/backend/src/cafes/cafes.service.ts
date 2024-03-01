@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import type { PaginationDto } from '@src/common';
+import type { ClientSession, UpdateQuery } from 'mongoose';
 import { CafesHttpService } from './cafes-http';
 import { CafesRepository } from './cafes.repository';
 import type { CreateCafeDto, FindAllCafesDto } from './dto';
+import type { Cafe } from './schemas';
 
 @Injectable()
 export class CafesService {
@@ -59,6 +61,10 @@ export class CafesService {
 
   async findOneById(id) {
     return this.cafesRepository.findOneById(id);
+  }
+
+  async update(id, updateQuery: UpdateQuery<Cafe>, session?: ClientSession) {
+    return this.cafesRepository.update(id, updateQuery, session);
   }
 
   async remove(id) {

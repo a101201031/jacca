@@ -1,17 +1,38 @@
-import { Controller, Get, Query } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import {
   ApiPaginationQuery,
+  FirebaseAuthGuard,
   PaginationDto,
   PaginationQuery,
+  RequestWithFirebaseAuth,
 } from '@src/common';
-import { ReviewsService } from './reviews.service';
 import { FindAllReviewsDto } from './dto';
+import { CreateReviewDto } from './dto/create-review.dto';
+import { ReviewsService } from './reviews.service';
 
 @ApiTags('reviews')
 @Controller('reviews')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
+
+  @ApiBearerAuth('access-token')
+  @UseGuards(FirebaseAuthGuard)
+  @Post()
+  async create(
+    @Req() req: RequestWithFirebaseAuth,
+    @Body() createReviewDto: CreateReviewDto,
+  ) {
+    return this.reviewsService.create(createReviewDto, req.user.uid);
+  }
 
   @ApiPaginationQuery()
   @Get()

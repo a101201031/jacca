@@ -1,18 +1,49 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import type { FilterQuery } from 'mongoose';
-import { Model } from 'mongoose';
 import type { PaginationDto } from '@src/common';
 import { User } from '@src/users';
-import { Review } from './schema';
+import type { ClientSession, FilterQuery, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import type { FindAllReviewsDto } from './dto';
+import type { CreateReviewDto } from './dto/create-review.dto';
+import { Review } from './schema';
 
+interface CreateReviewAdditional {
+  userId: User['_id'];
+}
 @Injectable()
 export class ReviewsRepository {
   constructor(
-    @InjectModel(Review.name) private reviewModel: Model<Review>,
-    @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(Review.name) private readonly reviewModel: Model<Review>,
+    @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
+
+  async create(
+    createReviewDto: CreateReviewDto,
+    createReviewAdditional: CreateReviewAdditional,
+    session?: ClientSession,
+  ) {
+    return this.reviewModel.create(
+      [
+        {
+          ...createReviewDto,
+          ...createReviewAdditional,
+        },
+      ],
+      { session },
+    );
+  }
+
+  async findScoreAverage(cafeId: Types.ObjectId) {
+    return this.reviewModel
+      .aggregate()
+      .match({ cafeId })
+      .group({
+        _id: null,
+        averageScore: { $avg: '$score' },
+      })
+      .exec();
+  }
 
   async findAll(
     filterQuery: FilterQuery<Review>,

@@ -15,5 +15,6 @@ import { CafesRepository } from './cafes.repository';
   ],
   controllers: [CafesController],
   providers: [CafesService, CafesRepository],
+  exports: [CafesService],
 })
 export class CafesModule {}

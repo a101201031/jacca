@@ -1,18 +1,16 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Schema as MongooseSchema } from 'mongoose';
-import { Cafe } from '@src/cafes';
-import { User } from '@src/users';
 import type { HydratedDocument } from 'mongoose';
+import { Schema as MongooseSchema } from 'mongoose';
 
 export type ReviewDocument = HydratedDocument<Review>;
 
 @Schema({ collection: 'reviews', timestamps: true })
 export class Review {
   @Prop({ ref: 'users' })
-  userId: User;
+  userId: string;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'cafes' })
-  cafeId: Cafe;
+  cafeId: MongooseSchema.Types.ObjectId;
 
   @Prop({ required: true })
   score: number;

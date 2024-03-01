@@ -10,7 +10,7 @@ export interface RequestWithFirebaseAuth extends Request {
 
 @Injectable()
 export class FirebaseAuthGuard implements CanActivate {
-  constructor(private firebaseAdminService: FirebaseAdminService) {}
+  constructor(private readonly firebaseAdminService: FirebaseAdminService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
