@@ -79,4 +79,8 @@ export class ReviewsService {
       },
     };
   }
+
+  async remove(id) {
+    await this.reviewsRepository.remove(id);
+  }
 }

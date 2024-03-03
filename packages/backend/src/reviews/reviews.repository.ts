@@ -69,4 +69,8 @@ export class ReviewsRepository {
   async countDocument(filterQuery: FilterQuery<Review>) {
     return this.reviewModel.countDocuments(filterQuery).exec();
   }
+
+  async remove(id) {
+    await this.reviewModel.findByIdAndDelete(id).lean().exec();
+  }
 }

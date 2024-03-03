@@ -1,7 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  HttpStatus,
+  Param,
   Post,
   Query,
   Req,
@@ -41,5 +45,13 @@ export class ReviewsController {
     @Query() findAllReviewsDto: FindAllReviewsDto,
   ) {
     return this.reviewsService.findAll(findAllReviewsDto, paginationDto);
+  }
+
+  @ApiBearerAuth('access-token')
+  @UseGuards(FirebaseAuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    await this.reviewsService.remove(id);
   }
 }
