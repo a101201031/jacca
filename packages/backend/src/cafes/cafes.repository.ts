@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import type { PaginationDto } from '@src/common';
 import type {
   ClientSession,
   FilterQuery,
@@ -7,7 +8,6 @@ import type {
   UpdateQuery,
 } from 'mongoose';
 import { Model } from 'mongoose';
-import type { PaginationDto } from '@src/common';
 import type { CreateCafeDto, FindAllCafesDto } from './dto';
 import type { CafeSchema } from './schemas';
 import { Cafe } from './schemas';
@@ -67,7 +67,7 @@ export class CafesRepository {
   }
 
   async findOneById(id) {
-    return this.cafeModel.findById(id).lean().exec();
+    return this.cafeModel.findById(id).populate('tags').exec();
   }
 
   async update(id, updateQuery: UpdateQuery<Cafe>, session?: ClientSession) {

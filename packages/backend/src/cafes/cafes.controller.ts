@@ -43,8 +43,7 @@ export class CafesController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const cafe = await this.cafesService.findOneById(id);
-    return cafe;
+    return this.cafesService.findOneById(id);
   }
 
   @ApiBearerAuth('access-token')
