@@ -8,7 +8,7 @@ export const userSelector = selector({
     const accessToken = get(accessTokenAtom);
     if (!accessToken) return null;
     const user = await fetcher.get({
-      path: '/user',
+      path: '/users',
       accessToken: accessToken,
     });
     return user;

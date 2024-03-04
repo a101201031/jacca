@@ -28,7 +28,7 @@ interface CafeTag {
 }
 
 export interface CafeListApiRes {
-  cafes: {
+  data: {
     _id: string;
     title: string;
     address: string;

@@ -13,7 +13,7 @@ export const reviewListSelector = selectorFamily<Review[], reviewListParams>({
     ({ cafeId }) =>
     async ({ get }) => {
       get(selectorTrigger('reviewList'));
-      const { reviews } = await fetcher.get({
+      const { data: reviews } = await fetcher.get({
         path: '/reviews',
         queryParams: { cafeId },
       });

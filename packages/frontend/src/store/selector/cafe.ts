@@ -6,7 +6,7 @@ import { selectorTrigger } from 'store';
 export const cafeListSelector = selector({
   key: 'cafeListSelector',
   get: async () => {
-    const { cafes: cafeList } = await fetcher.get<CafeListApiRes>({
+    const { data: cafeList } = await fetcher.get<CafeListApiRes>({
       path: '/cafes',
     });
     return cafeList;
@@ -23,8 +23,8 @@ export const cafeInfoSelector = selectorFamily<Cafe, cafeInfoParams>({
     ({ cafeId }) =>
     async ({ get }) => {
       get(selectorTrigger('cafeInfo'));
-      const { cafe } = await fetcher.get({
-        path: `/cafe/${cafeId}`,
+      const { data: cafe } = await fetcher.get({
+        path: `/cafes/${cafeId}`,
       });
       return cafe;
     },

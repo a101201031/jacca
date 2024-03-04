@@ -49,8 +49,8 @@ export function ReviewComponent({ cafeId }: { cafeId: string }) {
 
   useEffect(() => {
     (async () => {
-      const { reviews, paging } = await fetcher.get<{
-        reviews: Review[];
+      const { data: reviews, paging } = await fetcher.get<{
+        data: Review[];
         paging: { limit: number; offset: number; total: number };
       }>({
         path: 'reviews',
@@ -67,8 +67,8 @@ export function ReviewComponent({ cafeId }: { cafeId: string }) {
       if (!lastReviewRef) return;
 
       if (isIntersecting) {
-        const { reviews, paging } = await fetcher.get<{
-          reviews: Review[];
+        const { data: reviews, paging } = await fetcher.get<{
+          data: Review[];
           paging: { limit: number; offset: number; total: number };
         }>({
           path: 'reviews',

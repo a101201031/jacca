@@ -67,7 +67,7 @@ export class CafesRepository {
   }
 
   async findOneById(id) {
-    return this.cafeModel.findById(id).populate('tags').exec();
+    return this.cafeModel.findById(id).populate('tags').lean().exec();
   }
 
   async update(id, updateQuery: UpdateQuery<Cafe>, session?: ClientSession) {

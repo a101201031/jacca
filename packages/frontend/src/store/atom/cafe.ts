@@ -7,7 +7,7 @@ export const cafeListAtomFamily = atomFamily({
   default: selectorFamily({
     key: 'cafeListAtomFamily/default',
     get: () => async () => {
-      const { cafes: cafeList } = await fetcher.get<CafeListApiRes>({
+      const { data: cafeList } = await fetcher.get<CafeListApiRes>({
         path: '/cafes',
         queryParams: { limit: '8' },
       });

@@ -59,8 +59,9 @@ export class CafesService {
     };
   }
 
-  async findOneById(id) {
-    return this.cafesRepository.findOneById(id);
+  async findOneById(id): Promise<Cafe> {
+    const cafe = await this.cafesRepository.findOneById(id);
+    return { ...cafe, rating: cafe.rating / 20 };
   }
 
   async update(id, updateQuery: UpdateQuery<Cafe>, session?: ClientSession) {
