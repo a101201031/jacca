@@ -68,6 +68,6 @@ export class CafesService {
   }
 
   async remove(id) {
-    return this.cafesRepository.remove(id);
+    await this.cafesRepository.remove(id);
   }
 }

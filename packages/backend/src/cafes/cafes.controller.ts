@@ -47,6 +47,8 @@ export class CafesController {
     return cafe;
   }
 
+  @ApiBearerAuth('access-token')
+  @UseGuards(FirebaseAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   async remove(@Param('id') id: string) {
