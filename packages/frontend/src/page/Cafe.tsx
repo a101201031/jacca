@@ -47,9 +47,21 @@ export function Cafe() {
   );
 }
 
+export function usePopupState(initialState = false) {
+  const [isOpen, setIsOpen] = useState(initialState);
+
+  const open = useCallback(() => {
+    setIsOpen(true);
+  }, []);
+
+  const close = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
+  return { isOpen, open, close };
+}
+
 function CafeContent() {
-  const [cafeTagAddPopupOpen, setCafeTagAddPopupOpen] = useState(false);
-  const [reviewAddPopupOpen, setReviewAddPopupOpen] = useState(false);
   const accessToken = useRecoilValue(accessTokenAtom);
 
   const { cafeId } = useParams<{ cafeId: string }>() as Readonly<{
@@ -80,19 +92,6 @@ function CafeContent() {
       map,
     });
   }, [cafeInfo.location.coordinates]);
-
-  const cafeTagAddHandleOpen = () => {
-    setCafeTagAddPopupOpen(true);
-  };
-  const cafeTagAddHandleClose = useCallback(() => {
-    setCafeTagAddPopupOpen(false);
-  }, []);
-  const reviewAddHandleOpen = () => {
-    setReviewAddPopupOpen(true);
-  };
-  const reviewAddHandleClose = useCallback(() => {
-    setReviewAddPopupOpen(false);
-  }, []);
 
   return (
     <>
@@ -131,38 +130,12 @@ function CafeContent() {
               </Typography>
             </FlexBox>
             <Space />
-            <IconButton sx={{ height: '100%' }} onClick={reviewAddHandleOpen}>
-              <EditNoteOutlined fontSize="large" />
-              <Typography>리뷰 작성</Typography>
-            </IconButton>
-            <Popup
-              isOpen={reviewAddPopupOpen}
-              onClose={reviewAddHandleClose}
-              fullWidth
-            >
-              <ReviewAddForm cafeId={cafeId} onClose={reviewAddHandleClose} />
-            </Popup>
+            <ReviewAddContainer cafeId={cafeId} />
           </FlexBox>
           <FlexBox flexWrap="wrap" marginY="0.5rem">
             {!!cafeInfo.tags.length &&
               cafeInfo.tags.map((v) => <TagChip key={v._id}>{v.tag}</TagChip>)}
-            {accessToken && (
-              <>
-                <TagChip onClick={cafeTagAddHandleOpen}>
-                  태그 추가 <AddOutlined />
-                </TagChip>
-                <Popup
-                  isOpen={cafeTagAddPopupOpen}
-                  onClose={cafeTagAddHandleClose}
-                  fullWidth
-                >
-                  <CafeTagAddForm
-                    cafeId={cafeId}
-                    onClose={cafeTagAddHandleClose}
-                  />
-                </Popup>
-              </>
-            )}
+            {accessToken && <CafeAddContainer cafeId={cafeId} />}
           </FlexBox>
           <FlexBox flexWrap="wrap" marginY="0.5rem" columnGap="0.5rem">
             <EditNoteOutlined fontSize="small" />
@@ -213,6 +186,58 @@ function CafeContent() {
       </FlexBox>
       <ReviewComponent cafeId={cafeId} />
     </>
+  );
+}
+
+function CafeAddContainer({ cafeId }: { cafeId: string }) {
+  const { isOpen, open, close } = usePopupState(false);
+  return (
+    <>
+      <TagChip onClick={open}>
+        태그 추가 <AddOutlined />
+      </TagChip>
+      <Popup isOpen={isOpen} onClose={close} fullWidth>
+        <CafeTagAddForm cafeId={cafeId} onClose={close} />
+      </Popup>
+    </>
+  );
+}
+
+interface ReviewAddPopupProps {
+  isOpen: boolean;
+  onClose: () => void;
+  cafeId: string;
+}
+
+interface ReviewAddButtonProps {
+  onOpen: () => void;
+}
+
+function ReviewAddContainer({ cafeId }: { cafeId: string }) {
+  const { isOpen, open, close } = usePopupState();
+
+  return (
+    <>
+      <ReviewAddButton onOpen={open} />
+      <ReviewAddPopup isOpen={isOpen} onClose={close} cafeId={cafeId} />
+    </>
+  );
+}
+
+function ReviewAddButton({ onOpen }: ReviewAddButtonProps) {
+  return (
+    <IconButton sx={{ height: '100%' }} onClick={onOpen}>
+      <EditNoteOutlined fontSize="large" />
+      <Typography>리뷰 작성</Typography>
+    </IconButton>
+  );
+}
+
+function ReviewAddPopup({ isOpen, onClose, cafeId }: ReviewAddPopupProps) {
+  return (
+    <Popup isOpen={isOpen} onClose={onClose} fullWidth>
+      <ReviewAddForm cafeId={cafeId} onClose={onClose} />
+    </Popup>
   );
 }
 
