@@ -1,14 +1,11 @@
 import {
-  AddOutlined,
   EditNoteOutlined,
   PlaceOutlined,
   StarBorderOutlined,
 } from '@mui/icons-material';
 import {
   Box,
-  Button,
   Divider,
-  IconButton,
   ImageList,
   ImageListItem,
   Rating,
@@ -16,14 +13,9 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import {
-  AsyncBoundary,
-  CafeTagAddForm,
-  Popup,
-  ReviewComponent,
-} from 'component';
-import { ReviewAddForm } from 'component/ReviewForm';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { AsyncBoundary, ReviewComponent, TagChip } from 'component';
+import { CafeTagAddContainer, ReviewAddContainer } from 'containers';
+import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { accessTokenAtom, cafeInfoSelector } from 'store';
@@ -45,20 +37,6 @@ export function Cafe() {
       </MainContainer>
     </>
   );
-}
-
-export function usePopupState(initialState = false) {
-  const [isOpen, setIsOpen] = useState(initialState);
-
-  const open = useCallback(() => {
-    setIsOpen(true);
-  }, []);
-
-  const close = useCallback(() => {
-    setIsOpen(false);
-  }, []);
-
-  return { isOpen, open, close };
 }
 
 function CafeContent() {
@@ -135,7 +113,7 @@ function CafeContent() {
           <FlexBox flexWrap="wrap" marginY="0.5rem">
             {!!cafeInfo.tags.length &&
               cafeInfo.tags.map((v) => <TagChip key={v._id}>{v.tag}</TagChip>)}
-            {accessToken && <CafeAddContainer cafeId={cafeId} />}
+            {accessToken && <CafeTagAddContainer cafeId={cafeId} />}
           </FlexBox>
           <FlexBox flexWrap="wrap" marginY="0.5rem" columnGap="0.5rem">
             <EditNoteOutlined fontSize="small" />
@@ -189,58 +167,6 @@ function CafeContent() {
   );
 }
 
-function CafeAddContainer({ cafeId }: { cafeId: string }) {
-  const { isOpen, open, close } = usePopupState(false);
-  return (
-    <>
-      <TagChip onClick={open}>
-        태그 추가 <AddOutlined />
-      </TagChip>
-      <Popup isOpen={isOpen} onClose={close} fullWidth>
-        <CafeTagAddForm cafeId={cafeId} onClose={close} />
-      </Popup>
-    </>
-  );
-}
-
-interface ReviewAddPopupProps {
-  isOpen: boolean;
-  onClose: () => void;
-  cafeId: string;
-}
-
-interface ReviewAddButtonProps {
-  onOpen: () => void;
-}
-
-function ReviewAddContainer({ cafeId }: { cafeId: string }) {
-  const { isOpen, open, close } = usePopupState();
-
-  return (
-    <>
-      <ReviewAddButton onOpen={open} />
-      <ReviewAddPopup isOpen={isOpen} onClose={close} cafeId={cafeId} />
-    </>
-  );
-}
-
-function ReviewAddButton({ onOpen }: ReviewAddButtonProps) {
-  return (
-    <IconButton sx={{ height: '100%' }} onClick={onOpen}>
-      <EditNoteOutlined fontSize="large" />
-      <Typography>리뷰 작성</Typography>
-    </IconButton>
-  );
-}
-
-function ReviewAddPopup({ isOpen, onClose, cafeId }: ReviewAddPopupProps) {
-  return (
-    <Popup isOpen={isOpen} onClose={onClose} fullWidth>
-      <ReviewAddForm cafeId={cafeId} onClose={onClose} />
-    </Popup>
-  );
-}
-
 const DetailTable = styled('table')`
   margin: 1rem 0;
 `;
@@ -262,23 +188,6 @@ const DetailTd = styled('td')`
   text-align: left;
   vertical-align: middle;
   padding-bottom: 5px px;
-`;
-
-const TagChip = styled(Button)`
-  color: ${({ theme }) => theme.palette.primary.main};
-  background: ${({ theme }) => theme.palette.grey[100]};
-  font-weight: 500;
-  font-size: 1rem;
-  margin-bottom: 0.875rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  height: 2rem;
-  border-radius: 1rem;
-  display: inline-flex;
-  -webkit-box-align: center;
-  align-items: center;
-  margin-right: 0.875rem;
-  text-decoration: none;
 `;
 
 const CafeContentBox = styled(Box)`

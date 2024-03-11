@@ -2,13 +2,14 @@ import {
   Box,
   Button,
   Checkbox,
+  Dialog,
   FormControlLabel,
   FormGroup,
   Toolbar,
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { AsyncBoundary, CafeAddForm, CafeCard, Popup } from 'component';
+import { AsyncBoundary, CafeAddForm, CafeCard } from 'component';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { accessTokenAtom, cafeListSelector } from 'store';
@@ -73,13 +74,13 @@ export function CafeList() {
                 <Button variant="outlined" onClick={cafeAddHandlOpen}>
                   카페 등록하기
                 </Button>
-                <Popup
-                  isOpen={cafeAddPopupOpen}
+                <Dialog
+                  open={cafeAddPopupOpen}
                   onClose={cafeAddHandleClose}
                   fullWidth
                 >
                   <CafeAddForm onClose={cafeAddHandleClose} />
-                </Popup>
+                </Dialog>
               </>
             )}
           </Box>
