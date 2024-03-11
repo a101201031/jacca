@@ -14,8 +14,11 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { AsyncBoundary, ReviewComponent, TagChip } from 'component';
-import { CafeTagAddContainer, ReviewAddContainer } from 'containers';
-import { useEffect, useRef } from 'react';
+import {
+  CafeTagAddContainer,
+  MapContainer,
+  ReviewAddContainer,
+} from 'containers';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { accessTokenAtom, cafeInfoSelector } from 'store';
@@ -24,52 +27,22 @@ import { FlexBox, MainContainer, Space } from 'style';
 export function Cafe() {
   return (
     <>
-      <Toolbar />
-      <MainContainer>
-        <AsyncBoundary
-          suspenseFallback={<></>}
-          errorFallback={() => {
-            return <></>;
-          }}
-        >
+      <AsyncBoundary suspenseFallback={<></>} errorFallback={() => <></>}>
+        <Toolbar />
+        <MainContainer>
           <CafeContent />
-        </AsyncBoundary>
-      </MainContainer>
+        </MainContainer>
+      </AsyncBoundary>
     </>
   );
 }
 
 function CafeContent() {
   const accessToken = useRecoilValue(accessTokenAtom);
-
   const { cafeId } = useParams<{ cafeId: string }>() as Readonly<{
     cafeId: string;
   }>;
-  const mapElement = useRef(null);
   const cafeInfo = useRecoilValue(cafeInfoSelector({ cafeId }));
-
-  useEffect(() => {
-    const { naver } = window;
-    if (!mapElement.current || !naver) return;
-
-    const location = new naver.maps.LatLng(
-      cafeInfo.location.coordinates[1],
-      cafeInfo.location.coordinates[0],
-    );
-    const mapOptions: naver.maps.MapOptions = {
-      center: location,
-      zoom: 17,
-      zoomControl: true,
-      zoomControlOptions: {
-        position: naver.maps.Position.TOP_RIGHT,
-      },
-    };
-    const map = new naver.maps.Map(mapElement.current, mapOptions);
-    new naver.maps.Marker({
-      position: location,
-      map,
-    });
-  }, [cafeInfo.location.coordinates]);
 
   return (
     <>
@@ -160,7 +133,7 @@ function CafeContent() {
             </DetailTable>
           </Box>
         </CafeContentBox>
-        <MapContainer ref={mapElement} />
+        <MapContainer location={cafeInfo.location} />
       </FlexBox>
       <ReviewComponent cafeId={cafeId} />
     </>
@@ -194,14 +167,4 @@ const CafeContentBox = styled(Box)`
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-`;
-
-const MapContainer = styled(Box)`
-  width: 640px;
-  height: 320px;
-  margin: auto;
-  ${({ theme }) => theme.breakpoints.down('md')} {
-    width: calc(100% - 1rem);
-    height: 22vh;
-  }
 `;

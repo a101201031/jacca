@@ -3,5 +3,6 @@ export * from './AsyncBoundary';
 export * from './CafeForm';
 export * from './Card';
 export * from './Login';
+export * from './MapBox';
 export * from './cafe';
 export * from './review';
