@@ -5,4 +5,5 @@ export * from './Card';
 export * from './Login';
 export * from './MapBox';
 export * from './cafe';
+export * from './home';
 export * from './review';

@@ -1,9 +1,7 @@
 import { Box, Toolbar, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { AsyncBoundary, CafeCard } from 'component';
-import { useRecoilValue } from 'recoil';
-import { cafeListAtomFamily } from 'store/atom/cafe';
-import { FlexBox } from 'style';
+import { AsyncBoundary } from 'component';
+import { CafeSectionContainer } from 'containers';
 
 export function Home() {
   return (
@@ -36,35 +34,10 @@ export function Home() {
             return <></>;
           }}
         >
-          <CafeSection />
+          <CafeSectionContainer />
         </AsyncBoundary>
       </Box>
     </main>
-  );
-}
-
-function CafeSection() {
-  const cafeList = useRecoilValue(cafeListAtomFamily('key'));
-  return (
-    <>
-      <Typography variant="h2" color="primary" paddingX="5.625rem">
-        내 주변 카페 리스트
-      </Typography>
-      <Box marginTop="1.7rem">
-        <FlexBox flexWrap="wrap" marginX="5.625rem">
-          {cafeList.map((v) => (
-            <CafeCard
-              key={v._id}
-              cafeId={v._id}
-              title={v.title}
-              rating={v.rating}
-              address={v.address}
-              imageUrl={v.images[0].url}
-            />
-          ))}
-        </FlexBox>
-      </Box>
-    </>
   );
 }
 

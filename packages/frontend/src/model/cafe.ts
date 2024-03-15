@@ -28,15 +28,7 @@ interface CafeTag {
 }
 
 export interface CafeListApiRes {
-  data: {
-    _id: string;
-    title: string;
-    address: string;
-    roadAddress: string;
-    rating: number;
-    images: { _id: string; title: string; url: string }[];
-    tags: string[];
-  }[];
+  data: Cafe[];
   paging: {
     limit: number;
     offset: number;
