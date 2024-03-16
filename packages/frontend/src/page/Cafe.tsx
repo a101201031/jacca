@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { AsyncBoundary, ReviewComponent, TagChip } from 'component';
+import { AsyncBoundary, ReviewComponent, TagChip, UserGuard } from 'component';
 import {
   CafeTagAddContainer,
   MapContainer,
@@ -21,7 +21,7 @@ import {
 } from 'containers';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { accessTokenAtom, cafeInfoSelector } from 'store';
+import { cafeInfoSelector } from 'store';
 import { FlexBox, MainContainer, Space } from 'style';
 
 export function Cafe() {
@@ -38,7 +38,6 @@ export function Cafe() {
 }
 
 function CafeContent() {
-  const accessToken = useRecoilValue(accessTokenAtom);
   const { cafeId } = useParams<{ cafeId: string }>() as Readonly<{
     cafeId: string;
   }>;
@@ -86,7 +85,9 @@ function CafeContent() {
           <FlexBox flexWrap="wrap" marginY="0.5rem">
             {!!cafeInfo.tags.length &&
               cafeInfo.tags.map((v) => <TagChip key={v._id}>{v.tag}</TagChip>)}
-            {accessToken && <CafeTagAddContainer cafeId={cafeId} />}
+            <UserGuard>
+              <CafeTagAddContainer cafeId={cafeId} />
+            </UserGuard>
           </FlexBox>
           <FlexBox flexWrap="wrap" marginY="0.5rem" columnGap="0.5rem">
             <EditNoteOutlined fontSize="small" />

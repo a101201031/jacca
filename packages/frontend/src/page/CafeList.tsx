@@ -8,15 +8,11 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { AsyncBoundary } from 'component';
+import { AsyncBoundary, UserGuard } from 'component';
 import { CafeAddContainer, CafeListContainer } from 'containers';
-import { useRecoilValue } from 'recoil';
-import { accessTokenAtom } from 'store';
 import { FlexBox } from 'style';
 
 export function CafeList() {
-  const accessToken = useRecoilValue(accessTokenAtom);
-
   return (
     <main>
       <Toolbar />
@@ -59,7 +55,11 @@ export function CafeList() {
             <Button variant="text">리뷰 많은 순</Button>
             <Button variant="text">가까운 순</Button>
           </Box>
-          <Box>{accessToken && <CafeAddContainer />}</Box>
+          <Box>
+            <UserGuard>
+              <CafeAddContainer />
+            </UserGuard>
+          </Box>
         </FlexBox>
         <FlexBox flexWrap="wrap" marginX="5.625rem">
           <AsyncBoundary

@@ -1,5 +1,4 @@
 export * from './Appbar';
-export * from './AsyncBoundary';
 export * from './Card';
 export * from './Login';
 export * from './MapBox';
@@ -7,3 +6,4 @@ export * from './cafe';
 export * from './home';
 export * from './review';
 export * from './cafeList';
+export * from './common';
