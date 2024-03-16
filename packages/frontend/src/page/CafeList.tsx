@@ -2,29 +2,20 @@ import {
   Box,
   Button,
   Checkbox,
-  Dialog,
   FormControlLabel,
   FormGroup,
   Toolbar,
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { AsyncBoundary, CafeAddForm, CafeCard } from 'component';
-import { useState } from 'react';
+import { AsyncBoundary } from 'component';
+import { CafeAddContainer, CafeListContainer } from 'containers';
 import { useRecoilValue } from 'recoil';
-import { accessTokenAtom, cafeListSelector } from 'store';
+import { accessTokenAtom } from 'store';
 import { FlexBox } from 'style';
 
 export function CafeList() {
-  const [cafeAddPopupOpen, setCafeAddPopupOpen] = useState(false);
   const accessToken = useRecoilValue(accessTokenAtom);
-
-  const cafeAddHandlOpen = () => {
-    setCafeAddPopupOpen(true);
-  };
-  const cafeAddHandleClose = () => {
-    setCafeAddPopupOpen(false);
-  };
 
   return (
     <main>
@@ -68,22 +59,7 @@ export function CafeList() {
             <Button variant="text">리뷰 많은 순</Button>
             <Button variant="text">가까운 순</Button>
           </Box>
-          <Box>
-            {accessToken && (
-              <>
-                <Button variant="outlined" onClick={cafeAddHandlOpen}>
-                  카페 등록하기
-                </Button>
-                <Dialog
-                  open={cafeAddPopupOpen}
-                  onClose={cafeAddHandleClose}
-                  fullWidth
-                >
-                  <CafeAddForm onClose={cafeAddHandleClose} />
-                </Dialog>
-              </>
-            )}
-          </Box>
+          <Box>{accessToken && <CafeAddContainer />}</Box>
         </FlexBox>
         <FlexBox flexWrap="wrap" marginX="5.625rem">
           <AsyncBoundary
@@ -92,29 +68,11 @@ export function CafeList() {
               return <></>;
             }}
           >
-            <CafeListItems />
+            <CafeListContainer />
           </AsyncBoundary>
         </FlexBox>
       </Box>
     </main>
-  );
-}
-
-function CafeListItems() {
-  const cafeList = useRecoilValue(cafeListSelector);
-  return (
-    <>
-      {cafeList.map((v) => (
-        <CafeCard
-          key={v._id}
-          cafeId={v._id}
-          title={v.title}
-          rating={v.rating}
-          address={v.address}
-          imageUrl={v.images[0].url}
-        />
-      ))}
-    </>
   );
 }
 
