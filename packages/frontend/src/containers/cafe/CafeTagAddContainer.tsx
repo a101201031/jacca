@@ -1,7 +1,7 @@
 import { AddOutlined } from '@mui/icons-material';
 import { Dialog } from '@mui/material';
 import { TagChip } from 'component/cafe/TagChip';
-import { CafeTagAddForm } from 'form/CafeTagAddForm';
+import { CafeTagAddForm } from 'form';
 import { usePopupState } from 'hooks';
 
 export function CafeTagAddContainer({ cafeId }: { cafeId: string }) {
