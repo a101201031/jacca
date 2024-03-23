@@ -10,27 +10,29 @@ const axiosClient = axios.create({
 
 interface PostPutPayload {
   path: string;
-  queryParams?: { [key: string]: string };
+  queryParams?: { [key: string]: string | number };
   bodyParams?: { [key: string]: any };
   accessToken?: string;
 }
 
 interface GetDeletePayload {
   path: string;
-  queryParams?: { [key: string]: string };
+  queryParams?: { [key: string]: string | number };
   accessToken?: string;
 }
 
 export const planeFetcher = axiosClient;
 
-function queryParamsParser(queryParams: { [key: string]: string } = {}) {
+function queryParamsParser(
+  queryParams: { [key: string]: string | number } = {},
+) {
   return keys(queryParams).length === 0
     ? ''
     : '?' +
         chain(queryParams)
           .toPairs()
           .reduce((urlSearchParams, keyValuePair) => {
-            urlSearchParams.set(keyValuePair[0], keyValuePair[1]);
+            urlSearchParams.set(keyValuePair[0], keyValuePair[1].toString());
             return urlSearchParams;
           }, new URLSearchParams())
           .value()
